@@ -2,12 +2,16 @@ using System;
 
 public class Tyr : Ficha
 {
-    public Tyr() : base("Tyr, el Dios de la Guerra", 3, "Justicia Implacable", 3)
-    {
+    public Tyr() : base("Tyr, el Dios de la Guerra", 3)
+    {   
+        Habilidades.Add(new JusticiaImplacable());
     }
 
-    public override void UsarHabilidad()
+    public override void UsarHabilidad(int indice)
     {
-        Console.WriteLine("Tyr usa Justicia Implacable y reduce la velocidad de una ficha enemiga adyacente a 1 casilla por turno durante los próximos 2 turnos.");
+        if (indice >= 0 && indice < Habilidades.Count)
+        {
+            Habilidades[indice].Usar(this, this);
+        }
     }
 }

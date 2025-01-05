@@ -2,12 +2,16 @@ using System;
 
 public class Odin : Ficha
 {
-    public Odin() : base("Odin, el Padre de Todos", 2, "Rayo de Odín", 3)
-    {
+    public Odin() : base("Odin, el Padre de Todos", 2)
+    {  
+        Habilidades.Add(new RayoDeOdin());
     }
 
-    public override void UsarHabilidad()
+    public override void UsarHabilidad(int indice)
     {
-        Console.WriteLine("Odin usa Rayo de Odín y paraliza una ficha enemiga en línea recta durante un turno.");
+        if (indice >= 0 && indice < Habilidades.Count)
+        {
+            Habilidades[indice].Usar(this, this);
+        }
     }
 }

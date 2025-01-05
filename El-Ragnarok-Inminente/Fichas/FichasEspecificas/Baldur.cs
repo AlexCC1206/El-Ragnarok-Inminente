@@ -2,12 +2,16 @@ using System;
 
 public class Baldur : Ficha
 {
-    public Baldur() : base("Baldur, el Dios de la Luz", 3, "Resiliencia Inmortal", 1)
+    public Baldur() : base("Baldur, el Dios de la Luz", 3)
     {
+        Habilidades.Add(new ResilienciaInmortal());
     }
 
-    public override void UsarHabilidad()
+    public override void UsarHabilidad(int indice)
     {
-        Console.WriteLine("Baldur usa Resiliencia Inmortal y ignora el efecto de la próxima trampa en la que caiga.");
+        if (indice >= 0 && indice < Habilidades.Count)
+        {
+            Habilidades[indice].Usar(this, this);
+        }
     }
 }
