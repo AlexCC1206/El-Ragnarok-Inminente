@@ -5,12 +5,15 @@ public class Tablero
     private char[,] celdas;
     private int tamaño;
     private Random random;
+    private List<Trampa> trampas;
+
 
     public Tablero(int n)
     {
         tamaño = n;
         celdas = new char[n, n];
         random = new Random();
+        trampas = new List<Trampa>();
         Inicializar();
     }
 
@@ -35,6 +38,7 @@ public class Tablero
         }
 
         AñadirObstaculos();
+        AñadirTrampas();
     }
 
     private void AñadirObstaculos()
@@ -50,6 +54,40 @@ public class Tablero
             } while (celdas[x, y] != '.' || !EsAccesible(x, y)); // Asegura que no se sobreescriba un obstáculo existente y que el tablero siga siendo accesible
 
             celdas[x, y] = '#'; // Representa un obstáculo con '#'
+        }
+    }
+
+    private void AñadirTrampas()
+    {
+        int numTrampas = (tamaño - 2) * (tamaño - 2) / 10; // Ejemplo: 10% del tablero interno serán trampas
+        for (int i = 0; i < numTrampas; i++)
+        {
+            int x, y;
+            do
+            {
+                x = random.Next(1, tamaño - 1); // Evita los bordes
+                y = random.Next(1, tamaño - 1); // Evita los bordes
+            } while (celdas[x, y] != '.' || !EsAccesible(x, y)); // Asegura que no se sobreescriba una trampa existente y que el tablero siga siendo accesible
+
+            Trampa trampa = GenerarTrampaAleatoria();
+            celdas[x, y] = trampa.Simbolo; // Representa una trampa con su símbolo
+            trampas.Add(trampa);
+        }
+    }
+
+    private Trampa GenerarTrampaAleatoria()
+    {
+        int tipoTrampa = random.Next(3);
+        switch (tipoTrampa)
+        {
+            case 0:
+                return new WindTrap();
+            case 1:
+                return new RootTrap();
+            case 2:
+                return new JotunheimTrap();
+            default:
+                return new WindTrap();
         }
     }
 
