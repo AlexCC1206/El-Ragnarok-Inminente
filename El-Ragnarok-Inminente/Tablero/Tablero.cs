@@ -33,19 +33,19 @@ public class Tablero
         // Establece los bordes como obstáculos
         for (int i = 0; i < tamaño; i++)
         {
-            celdas[0, i] = '#'; // Primera fila
-            celdas[tamaño - 1, i] = '#'; // Última fila
-            celdas[i, 0] = '#'; // Primera columna
-            celdas[i, tamaño - 1] = '#'; // Última columna
+            celdas[0, i] = '■'; // Primera fila
+            celdas[tamaño - 1, i] = '■'; // Última fila
+            celdas[i, 0] = '■'; // Primera columna
+            celdas[i, tamaño - 1] = '■'; // Última columna
         }
 
-        //AñadirObstaculos();
-        //AñadirTrampas();
+        AñadirObstaculos();
+        AñadirTrampas();
     }
 
     private void AñadirObstaculos()
     {
-        int numObstaculos = (tamaño - 2) * (tamaño - 2) / 5; // Ejemplo: 20% del tablero serán obstáculos
+        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 30 / 100; // Ejemplo: 20% del tablero serán obstáculos
         for (int i = 0; i < numObstaculos; i++)
         {
             int x, y;
@@ -55,13 +55,13 @@ public class Tablero
                 y = random.Next(1, tamaño - 1); // Evita los bordes
             } while (celdas[x, y] != '.' || !EsAccesible(x, y)); // Asegura que no se sobreescriba un obstáculo existente y que el tablero siga siendo accesible
 
-            celdas[x, y] = '#'; // Representa un obstáculo con '#'
+            celdas[x, y] = '■'; // Representa un obstáculo con '#'
         }
     }
 
     private void AñadirTrampas()
     {
-        int numTrampas = (tamaño - 2) * (tamaño - 2) / 10; // Ejemplo: 10% del tablero interno serán trampas
+        int numTrampas = (tamaño - 2) * (tamaño - 2) * 10 / 100; // Ejemplo: 10% del tablero interno serán trampas
         for (int i = 0; i < numTrampas; i++)
         {
             int x, y;
@@ -96,7 +96,7 @@ public class Tablero
     private bool EsAccesible(int obstaculoX, int obstaculoY)
     {
         // Temporarily place the obstacle
-        celdas[obstaculoX, obstaculoY] = '#';
+        celdas[obstaculoX, obstaculoY] = '■';
 
         // Check if there's a path from (1, 1) to (tamaño-2, tamaño-2)
         bool accesible = HayCamino(1, 1, tamaño - 2, tamaño - 2);
@@ -109,7 +109,7 @@ public class Tablero
 
     public bool HayCamino(int startX, int startY, int endX, int endY)
     {
-        if (celdas[startX, startY] == '#' || celdas[endX, endY] == '#')
+        if (celdas[startX, startY] == '■' || celdas[endX, endY] == '■')
             return false;
 
         bool[,] visitado = new bool[tamaño, tamaño];
@@ -157,17 +157,11 @@ public class Tablero
 
     public void AñadirFicha(Ficha ficha, int x, int y)
     {
-        if (celdas[x, y] == '.')
-        {
-            fichas.Add(ficha);
-            ficha.PosicionX = x;
-            ficha.PosicionY = y;
-            celdas[x, y] = ficha.Simbolo; // Representa una ficha con 'F'
-        }
-        else
-        {
-            throw new InvalidOperationException("La posición no está disponible.");
-        }
+        // Forzar la colocación de la ficha en la posición especificada
+        fichas.Add(ficha);
+        ficha.PosicionX = x;
+        ficha.PosicionY = y;
+        celdas[x, y] = ficha.Simbolo; // Representa una ficha con 'F'
     }
 
     public void MoverFicha(Ficha ficha, int nuevaX, int nuevaY)
@@ -184,6 +178,30 @@ public class Tablero
         {
             throw new InvalidOperationException("Movimiento no válido.");
         }
+    }
+
+    private bool EsMovimientoValido(Ficha ficha, int nuevaX, int nuevaY)
+    {
+        // Verifica que la nueva posición esté dentro de los límites del tablero
+        if (nuevaX < 0 || nuevaX >= tamaño || nuevaY < 0 || nuevaY >= tamaño)
+        {
+            return false;
+        }
+
+        // Verifica que la nueva posición no esté bloqueada por un obstáculo
+        if (celdas[nuevaX, nuevaY] == '■')
+        {
+            return false;
+        }
+
+        // Verifica que la ficha no se mueva más allá de su velocidad permitida
+        int distancia = Math.Abs(nuevaX - ficha.PosicionX) + Math.Abs(nuevaY - ficha.PosicionY);
+        if (distancia > ficha.Velocidad)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void AplicarEfectoTrampa(Ficha ficha)
