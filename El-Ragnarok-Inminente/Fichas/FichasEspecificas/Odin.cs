@@ -2,7 +2,7 @@ using System;
 
 public class Odin : Ficha
 {
-    public Odin() : base("Odin, el Padre de Todos", 2)
+    public Odin() : base("Odin, el Padre de Todos", 2, 'O')
     {  
         Habilidades.Add(new RayoDeOdin());
     }

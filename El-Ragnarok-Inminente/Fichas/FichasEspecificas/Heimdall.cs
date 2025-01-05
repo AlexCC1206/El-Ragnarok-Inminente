@@ -2,7 +2,7 @@ using System;
 
 public class Heimdall : Ficha
 {
-    public Heimdall() : base("Heimdall, el Guardián de Asgard", 3)
+    public Heimdall() : base("Heimdall, el Guardián de Asgard", 3, 'H')
     {
         Habilidades.Add(new VisionProfetica());
     }

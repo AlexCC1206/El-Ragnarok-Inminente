@@ -2,7 +2,7 @@ using System;
 
 public class Baldur : Ficha
 {
-    public Baldur() : base("Baldur, el Dios de la Luz", 3)
+    public Baldur() : base("Baldur, el Dios de la Luz", 3, 'B')
     {
         Habilidades.Add(new ResilienciaInmortal());
     }

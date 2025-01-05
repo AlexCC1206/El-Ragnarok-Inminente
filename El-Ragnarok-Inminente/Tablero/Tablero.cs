@@ -6,6 +6,7 @@ public class Tablero
     private int tamaño;
     private Random random;
     private List<Trampa> trampas;
+    private List<Ficha> fichas;
 
 
     public Tablero(int n)
@@ -14,6 +15,7 @@ public class Tablero
         celdas = new char[n, n];
         random = new Random();
         trampas = new List<Trampa>();
+        fichas = new List<Ficha>();
         Inicializar();
     }
 
@@ -37,8 +39,8 @@ public class Tablero
             celdas[i, tamaño - 1] = '#'; // Última columna
         }
 
-        AñadirObstaculos();
-        AñadirTrampas();
+        //AñadirObstaculos();
+        //AñadirTrampas();
     }
 
     private void AñadirObstaculos()
@@ -150,6 +152,68 @@ public class Tablero
                 Console.Write(celdas[i, j] + " ");
             }
             Console.WriteLine();
+        }
+    }
+
+    public void AñadirFicha(Ficha ficha, int x, int y)
+    {
+        if (celdas[x, y] == '.')
+        {
+            fichas.Add(ficha);
+            ficha.PosicionX = x;
+            ficha.PosicionY = y;
+            celdas[x, y] = ficha.Simbolo; // Representa una ficha con 'F'
+        }
+        else
+        {
+            throw new InvalidOperationException("La posición no está disponible.");
+        }
+    }
+
+    public void MoverFicha(Ficha ficha, int nuevaX, int nuevaY)
+    {
+        if (nuevaX >= 0 && nuevaX < tamaño && nuevaY >= 0 && nuevaY < tamaño && celdas[nuevaX, nuevaY] == '.')
+        {
+            celdas[ficha.PosicionX, ficha.PosicionY] = '.'; // Limpia la posición anterior
+            ficha.PosicionX = nuevaX;
+            ficha.PosicionY = nuevaY;
+            celdas[nuevaX, nuevaY] = ficha.Simbolo; // Coloca la ficha en la nueva posición
+            AplicarEfectoTrampa(ficha);
+        }
+        else
+        {
+            throw new InvalidOperationException("Movimiento no válido.");
+        }
+    }
+
+    private void AplicarEfectoTrampa(Ficha ficha)
+    {
+        foreach (var trampa in trampas)
+        {
+            if (celdas[ficha.PosicionX, ficha.PosicionY] == trampa.Simbolo)
+            {
+                trampa.Activar();
+                // Aquí puedes agregar lógica para aplicar el efecto de la trampa a la ficha
+                // Por ejemplo, reducir velocidad, inmovilizar, etc.
+                if (trampa is WindTrap)
+                {
+                    // Lógica para WindTrap
+                    ficha.PosicionX -= 2; // Ejemplo: mueve la ficha dos casillas hacia atrás
+                    Console.WriteLine($"{ficha.Nombre} es empujado hacia atrás por el Viento de Jörmungandr.");
+                }
+                else if (trampa is RootTrap)
+                {
+                    // Lógica para RootTrap
+                    ficha.Inmovilizado = true; // Inmoviliza la ficha
+                    Console.WriteLine($"{ficha.Nombre} queda atrapado por las raíces de Yggdrasil.");
+                }
+                else if (trampa is JotunheimTrap)
+                {
+                    // Lógica para JotunheimTrap
+                    ficha.Velocidad = 1; // Reduce la velocidad de la ficha
+                    Console.WriteLine($"{ficha.Nombre} se ralentiza debido a las Piedras de Jotunheim.");
+                }
+            }
         }
     }
 }

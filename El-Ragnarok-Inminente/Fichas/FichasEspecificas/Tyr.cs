@@ -2,7 +2,7 @@ using System;
 
 public class Tyr : Ficha
 {
-    public Tyr() : base("Tyr, el Dios de la Guerra", 3)
+    public Tyr() : base("Tyr, el Dios de la Guerra", 3, 'T')
     {   
         Habilidades.Add(new JusticiaImplacable());
     }
