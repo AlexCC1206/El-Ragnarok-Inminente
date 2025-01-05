@@ -1,0 +1,15 @@
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\bin\Debug\net8.0\El-Ragnarok-Inminente.exe
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\bin\Debug\net8.0\El-Ragnarok-Inminente.deps.json
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\bin\Debug\net8.0\El-Ragnarok-Inminente.runtimeconfig.json
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\bin\Debug\net8.0\El-Ragnarok-Inminente.dll
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\bin\Debug\net8.0\El-Ragnarok-Inminente.pdb
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.GeneratedMSBuildEditorConfig.editorconfig
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.AssemblyInfoInputs.cache
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.AssemblyInfo.cs
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.csproj.CoreCompileInputs.cache
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.sourcelink.json
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.dll
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\refint\El-Ragnarok-Inminente.dll
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.pdb
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.genruntimeconfig.cache
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\ref\El-Ragnarok-Inminente.dll
