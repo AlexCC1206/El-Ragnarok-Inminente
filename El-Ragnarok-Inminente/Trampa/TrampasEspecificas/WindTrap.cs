@@ -2,12 +2,14 @@ using System;
 
 public class WindTrap : Trampa
 {
-    public WindTrap() : base("Trampa de Viento", "Empuja al jugador hacia atrás.", 'W')
+    public WindTrap() : base("Trampa de Viento", "Empuja al jugador hacia atrás.", '~')
     {
     }
 
-    public override void Activar()
+    public override void Activar(Ficha ficha)
     {
-        Console.WriteLine("¡La trampa de viento se activa y empuja al jugador hacia atrás!");
+        // Lógica para WindTrap
+        ficha.PosicionX -= 2; // Ejemplo: mueve la ficha dos casillas hacia atrás
+        Console.WriteLine($"{ficha.Nombre} es empujado hacia atrás por el Viento de Jörmungandr.");
     }
 }

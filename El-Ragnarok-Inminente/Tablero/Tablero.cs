@@ -3,11 +3,11 @@ using System;
 public class Tablero
 {
     private char[,] celdas;
-    private int tamaño;
+    public int tamaño;
     private Random random;
     private List<Trampa> trampas;
     private List<Ficha> fichas;
-
+    private (int, int) salida; // Coordenadas de la salida
 
     public Tablero(int n)
     {
@@ -17,6 +17,7 @@ public class Tablero
         trampas = new List<Trampa>();
         fichas = new List<Ficha>();
         Inicializar();
+        GenerarSalida();
     }
 
     private void Inicializar()
@@ -43,9 +44,19 @@ public class Tablero
         AñadirTrampas();
     }
 
+    private void GenerarSalida()
+    {
+        // Establece la salida en la posición (9, 9)
+        int x = 10;
+        int y = 10;
+
+        salida = (x, y);
+        celdas[x, y] = '+'; // Representa la salida con 'S'
+    }
+
     private void AñadirObstaculos()
     {
-        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 30 / 100; // Ejemplo: 20% del tablero serán obstáculos
+        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 35 / 100; // Ejemplo: 20% del tablero serán obstáculos
         for (int i = 0; i < numObstaculos; i++)
         {
             int x, y;
@@ -61,7 +72,7 @@ public class Tablero
 
     private void AñadirTrampas()
     {
-        int numTrampas = (tamaño - 2) * (tamaño - 2) * 10 / 100; // Ejemplo: 10% del tablero interno serán trampas
+        int numTrampas = (tamaño - 2) * (tamaño - 2) * 15 / 100; // Ejemplo: 10% del tablero interno serán trampas
         for (int i = 0; i < numTrampas; i++)
         {
             int x, y;
@@ -72,6 +83,8 @@ public class Tablero
             } while (celdas[x, y] != '.' || !EsAccesible(x, y)); // Asegura que no se sobreescriba una trampa existente y que el tablero siga siendo accesible
 
             Trampa trampa = GenerarTrampaAleatoria();
+            trampa.PosicionX = x;
+            trampa.PosicionY = y;
             celdas[x, y] = trampa.Simbolo; // Representa una trampa con su símbolo
             trampas.Add(trampa);
         }
@@ -142,6 +155,49 @@ public class Tablero
         return false;
     }
 
+    public bool ValidarAccesibilidad()
+    {
+        bool[,] visitado = new bool[tamaño, tamaño];
+        Queue<(int, int)> cola = new Queue<(int, int)>();
+        cola.Enqueue((1, 1)); // Empieza desde (1, 1) para evitar los bordes
+        visitado[1, 1] = true;
+
+        int[] dx = { -1, 1, 0, 0 };
+        int[] dy = { 0, 0, -1, 1 };
+
+        while (cola.Count > 0)
+        {
+            var (x, y) = cola.Dequeue();
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nuevoX = x + dx[i];
+                int nuevoY = y + dy[i];
+
+                if (nuevoX >= 1 && nuevoX < tamaño - 1 && nuevoY >= 1 && nuevoY < tamaño - 1 && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != '#')
+                {
+                    cola.Enqueue((nuevoX, nuevoY));
+                    visitado[nuevoX, nuevoY] = true;
+                }
+            }
+        }
+        
+        // Verifica que todas las celdas accesibles hayan sido visitadas
+        for (int i = 1; i < tamaño - 1; i++)
+        {
+            for (int j = 1; j < tamaño - 1; j++)
+            {
+                if (celdas[i, j] == '.' && !visitado[i, j])
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
 
     public void Imprimir()
     {
@@ -166,7 +222,7 @@ public class Tablero
 
     public void MoverFicha(Ficha ficha, int nuevaX, int nuevaY)
     {
-        if (nuevaX >= 0 && nuevaX < tamaño && nuevaY >= 0 && nuevaY < tamaño && celdas[nuevaX, nuevaY] == '.')
+        if (EsMovimientoValido(ficha, nuevaX, nuevaY))
         {
             celdas[ficha.PosicionX, ficha.PosicionY] = '.'; // Limpia la posición anterior
             ficha.PosicionX = nuevaX;
@@ -208,9 +264,10 @@ public class Tablero
     {
         foreach (var trampa in trampas)
         {
-            if (celdas[ficha.PosicionX, ficha.PosicionY] == trampa.Simbolo)
-            {
-                trampa.Activar();
+            if (ficha.PosicionX == trampa.PosicionX && ficha.PosicionY == trampa.PosicionY)
+            {   
+                Console.WriteLine($"{ficha.Nombre} ha caído en una trampa!"); // Añadido mensaje de trampa
+                trampa.Activar(ficha); // Asegura que la trampa se active correctamente
                 // Aquí puedes agregar lógica para aplicar el efecto de la trampa a la ficha
                 // Por ejemplo, reducir velocidad, inmovilizar, etc.
                 if (trampa is WindTrap)
@@ -233,5 +290,9 @@ public class Tablero
                 }
             }
         }
+    }
+    public bool EsSalida(int x, int y)
+    {
+        return salida.Item1 == x && salida.Item2 == y;
     }
 }

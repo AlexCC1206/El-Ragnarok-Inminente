@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Turno
 {
-    private List<Jugador> jugadores;
+    public List<Jugador> jugadores;
     private int indiceJugadorActual;
 
     public Turno(List<Jugador> jugadores)
