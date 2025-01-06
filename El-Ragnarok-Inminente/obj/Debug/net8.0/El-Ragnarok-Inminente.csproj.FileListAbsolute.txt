@@ -13,3 +13,6 @@ D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok
 D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.pdb
 D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.genruntimeconfig.cache
 D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\ref\El-Ragnarok-Inminente.dll
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\bin\Debug\net8.0\Spectre.Console.dll
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragnarok-Inminente.csproj.AssemblyReference.cache
+D:\Alex Jr\Programación\Proyectos\Maze_Runner\El-Ragnarok-Inminente\El-Ragnarok-Inminente\obj\Debug\net8.0\El-Ragna.8A4C64A8.Up2Date

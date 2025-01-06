@@ -1,8 +1,9 @@
 using System;
+using Spectre.Console;
 
 public class Tablero
 {
-    private char[,] celdas;
+    public char[,] celdas;
     public int tamaño;
     private Random random;
     private List<Trampa> trampas;
@@ -27,7 +28,7 @@ public class Tablero
         {
             for (int j = 0; j < tamaño; j++)
             {
-                celdas[i, j] = '.'; 
+                celdas[i, j] = ' '; 
             }
         }
 
@@ -64,7 +65,7 @@ public class Tablero
             {
                 x = random.Next(1, tamaño - 1); // Evita los bordes
                 y = random.Next(1, tamaño - 1); // Evita los bordes
-            } while (celdas[x, y] != '.' || !EsAccesible(x, y)); // Asegura que no se sobreescriba un obstáculo existente y que el tablero siga siendo accesible
+            } while (celdas[x, y] != ' ' || !EsAccesible(x, y)); // Asegura que no se sobreescriba un obstáculo existente y que el tablero siga siendo accesible
 
             celdas[x, y] = '■'; // Representa un obstáculo con '#'
         }
@@ -80,7 +81,7 @@ public class Tablero
             {
                 x = random.Next(1, tamaño - 1); // Evita los bordes
                 y = random.Next(1, tamaño - 1); // Evita los bordes
-            } while (celdas[x, y] != '.' || !EsAccesible(x, y)); // Asegura que no se sobreescriba una trampa existente y que el tablero siga siendo accesible
+            } while (celdas[x, y] != ' ' || !EsAccesible(x, y)); // Asegura que no se sobreescriba una trampa existente y que el tablero siga siendo accesible
 
             Trampa trampa = GenerarTrampaAleatoria();
             trampa.PosicionX = x;
@@ -115,7 +116,7 @@ public class Tablero
         bool accesible = HayCamino(1, 1, tamaño - 2, tamaño - 2);
 
         // Remove the temporary obstacle
-        celdas[obstaculoX, obstaculoY] = '.';
+        celdas[obstaculoX, obstaculoY] = ' ';
 
         return accesible;
     }
@@ -144,7 +145,7 @@ public class Tablero
                 int nuevoX = x + dx[i];
                 int nuevoY = y + dy[i];
 
-                if (nuevoX >= 0 && nuevoX < tamaño && nuevoY >= 0 && nuevoY < tamaño && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != '#')
+                if (nuevoX >= 0 && nuevoX < tamaño && nuevoY >= 0 && nuevoY < tamaño && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != '■')
                 {
                     cola.Enqueue((nuevoX, nuevoY));
                     visitado[nuevoX, nuevoY] = true;
@@ -174,7 +175,7 @@ public class Tablero
                 int nuevoX = x + dx[i];
                 int nuevoY = y + dy[i];
 
-                if (nuevoX >= 1 && nuevoX < tamaño - 1 && nuevoY >= 1 && nuevoY < tamaño - 1 && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != '#')
+                if (nuevoX >= 1 && nuevoX < tamaño - 1 && nuevoY >= 1 && nuevoY < tamaño - 1 && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != '■')
                 {
                     cola.Enqueue((nuevoX, nuevoY));
                     visitado[nuevoX, nuevoY] = true;
@@ -187,7 +188,7 @@ public class Tablero
         {
             for (int j = 1; j < tamaño - 1; j++)
             {
-                if (celdas[i, j] == '.' && !visitado[i, j])
+                if (celdas[i, j] == ' ' && !visitado[i, j])
                 {
                     return false;
                 }
@@ -196,8 +197,6 @@ public class Tablero
 
         return true;
     }
-
-
 
     public void Imprimir()
     {
@@ -209,8 +208,15 @@ public class Tablero
             }
             Console.WriteLine();
         }
+
+        // Mostrar estado de las fichas
+        foreach (var ficha in fichas)
+        {
+            AnsiConsole.MarkupLine($"[bold]{ficha.Nombre}[/] está en ({ficha.PosicionX}, {ficha.PosicionY})");
+        }
     }
 
+    
     public void AñadirFicha(Ficha ficha, int x, int y)
     {
         // Forzar la colocación de la ficha en la posición especificada
@@ -224,7 +230,7 @@ public class Tablero
     {
         if (EsMovimientoValido(ficha, nuevaX, nuevaY))
         {
-            celdas[ficha.PosicionX, ficha.PosicionY] = '.'; // Limpia la posición anterior
+            celdas[ficha.PosicionX, ficha.PosicionY] = ' '; // Limpia la posición anterior
             ficha.PosicionX = nuevaX;
             ficha.PosicionY = nuevaY;
             celdas[nuevaX, nuevaY] = ficha.Simbolo; // Coloca la ficha en la nueva posición

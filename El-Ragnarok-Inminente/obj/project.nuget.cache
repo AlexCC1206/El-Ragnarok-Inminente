@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "39DfRdZ/pFg=",
+  "dgSpecHash": "V5dtvU7vRdI=",
   "success": true,
   "projectFilePath": "D:\\Alex Jr\\Programación\\Proyectos\\Maze_Runner\\El-Ragnarok-Inminente\\El-Ragnarok-Inminente\\El-Ragnarok-Inminente.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\spectre.console\\0.49.2-preview.0.69\\spectre.console.0.49.2-preview.0.69.nupkg.sha512"
+  ],
   "logs": []
 }

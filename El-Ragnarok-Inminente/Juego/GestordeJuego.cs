@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Spectre.Console;
 
 public class Juego
 {
@@ -15,34 +16,33 @@ public class Juego
         InicializarFichas(jugadores);
     }
 
-    private void InicializarFichas(List<Jugador> jugadores)
+     private void InicializarFichas(List<Jugador> jugadores)
     {
         Jugador jugador1 = jugadores[0];
         Jugador jugador2 = jugadores[1];
 
         // Selección de ficha para Jugador 1
-        Console.WriteLine($"{jugador1.Nombre}, selecciona una ficha:");
-        for (int i = 0; i < jugador1.Fichas.Count; i++)
-        {
-            Console.WriteLine($"{i + 1}. {jugador1.Fichas[i].Nombre}");
-        }
-        int indiceFicha1 = int.Parse(Console.ReadLine()!) - 1;
-        fichaJugador1 = jugador1.Fichas[indiceFicha1];
+        var prompt1 = new SelectionPrompt<string>()
+            .Title($"{jugador1.Nombre}, selecciona una ficha:")
+            .AddChoices(jugador1.Fichas.ConvertAll(f => f.Nombre));
+        string seleccion1 = AnsiConsole.Prompt(prompt1);
+        fichaJugador1 = jugador1.Fichas.Find(f => f.Nombre == seleccion1);
         tablero.AñadirFicha(fichaJugador1, 1, 1);
 
         // Selección de ficha para Jugador 2
-        Console.WriteLine($"{jugador2.Nombre}, selecciona una ficha:");
-        for (int i = 0; i < jugador2.Fichas.Count; i++)
-        {
-            Console.WriteLine($"{i + 1}. {jugador2.Fichas[i].Nombre}");
-        }
-        int indiceFicha2 = int.Parse(Console.ReadLine()!) - 1;
-        fichaJugador2 = jugador2.Fichas[indiceFicha2];
+        var prompt2 = new SelectionPrompt<string>()
+            .Title($"{jugador2.Nombre}, selecciona una ficha:")
+            .AddChoices(jugador2.Fichas.ConvertAll(f => f.Nombre));
+        string seleccion2 = AnsiConsole.Prompt(prompt2);
+        fichaJugador2 = jugador2.Fichas.Find(f => f.Nombre == seleccion2);
         tablero.AñadirFicha(fichaJugador2, tablero.tamaño - 2, tablero.tamaño - 2);
     }
 
     public void Iniciar()
     {
+        AnsiConsole.MarkupLine("[bold]Instrucciones:[/]");
+        AnsiConsole.MarkupLine("Usa WASD para mover la ficha (Jugador 1) o las flechas (Jugador 2). Presiona Spacebar (Jugador 1) o Enter (Jugador 2) para usar la habilidad.");
+        
         while (true)
         {
             Jugador jugadorActual = turno.ObtenerJugadorActual();
@@ -55,15 +55,15 @@ public class Juego
             catch (IOException)
             {
                 // Maneja la excepción si Console.Clear() no es compatible
-                Console.WriteLine("No se puede limpiar la consola en este entorno.");
+                AnsiConsole.MarkupLine("[red]No se puede limpiar la consola en este entorno.[/]");
             }
             tablero.Imprimir(); // Imprime el tablero actualizado
-            Console.WriteLine($"Turno de {jugadorActual.Nombre}");
+            AnsiConsole.MarkupLine($"[bold]Turno de {jugadorActual.Nombre}[/]");
 
             int movimientosRestantes = fichaSeleccionada.Velocidad;
 
             // Movimiento de ficha
-            Console.WriteLine("Usa WASD para mover la ficha (Jugador 1) o las flechas (Jugador 2). Presiona Spacebar (Jugador 1) o Enter (Jugador 2) para usar la habilidad.");
+            AnsiConsole.MarkupLine("[bold]Usa WASD para mover la ficha (Jugador 1) o las flechas (Jugador 2). Presiona Spacebar (Jugador 1) o Enter (Jugador 2) para usar la habilidad.[/]");
             while (movimientosRestantes > 0)
             {
                 var key = Console.ReadKey(true).Key;
@@ -119,25 +119,48 @@ public class Juego
                     {
                         tablero.MoverFicha(fichaSeleccionada, nuevaX, nuevaY);
                         movimientosRestantes--;
+                        try
+                        {
+                            Console.Clear(); // Limpia la consola después de cada movimiento
+                        }
+                        catch (IOException)
+                        {
+                            // Maneja la excepción si Console.Clear() no es compatible
+                            AnsiConsole.MarkupLine("[red]No se puede limpiar la consola en este entorno.[/]");
+                        }
+                        tablero.Imprimir(); // Imprime el tablero actualizado después de cada movimiento
+
+                        // Verifica si la ficha ha llegado a la salida
+                        if (tablero.EsSalida(fichaSeleccionada.PosicionX, fichaSeleccionada.PosicionY))
+                        {
+                            AnsiConsole.MarkupLine($"[bold green]{jugadorActual.Nombre} ha ganado al llegar a la salida con {fichaSeleccionada.Nombre}![/]");
+                            return; // Termina el juego
+                        }
                     }
                     catch (InvalidOperationException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        AnsiConsole.MarkupLine($"[red]{ex.Message}[/]");
                     }
                 }
             }
 
-            // Limpia la consola y vuelve a imprimir el tablero al final del turno
-            try
-            {
-                Console.Clear();
-            }
-            catch (IOException)
-            {
-                Console.WriteLine("No se puede limpiar la consola en este entorno.");
-            }
-            tablero.Imprimir();
             turno.SiguienteTurno();
         }
     }
+/*
+    private void MostrarTablero()
+    {
+        var table = new Table();
+        for (int i = 0; i < tablero.tamaño; i++)
+        {
+            var row = new List<string>();
+            for (int j = 0; j < tablero.tamaño; j++)
+            {
+                row.Add(tablero.ObtenerCelda(i, j).ToString());
+            }
+            table.AddRow(row.ToArray());
+        }
+        AnsiConsole.Render(table);
+    }
+    */
 }
