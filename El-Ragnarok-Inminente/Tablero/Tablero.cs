@@ -1,5 +1,6 @@
 using System;
 using Spectre.Console;
+using System.Text;
 
 public class Tablero
 {
@@ -200,32 +201,42 @@ public class Tablero
     }
     */
     public void Imprimir()
-    {
-        var table = new Table().Border(TableBorder.None)
+{
+    var table = new Table().Border(TableBorder.None)
         .Title("[bold yellow]Tablero del Juego[/]")
         .HideHeaders();
 
-        // Definir las columnas de la tabla
-        for (int i = 0; i < tamaño; i++)
-        {
-            table.AddColumn(new TableColumn(" "));
-        }
+    // Definir las columnas de la tabla
+    for (int i = 0; i < tamaño; i++)
+    {
+        table.AddColumn(new TableColumn(" "));
+    }
 
-        // Agregar filas a la tabla
-        for (int i = 0; i < tamaño; i++)
-        {
-            var row = new List<string>();
+    // Agregar filas a la tabla
+    for (int i = 0; i < tamaño; i++)
+    {
+        var row = new List<string>();
         for (int j = 0; j < tamaño; j++)
         {
-            // Si es la primera o última fila, o la primera o última columna, mostrar el borde
-            if (i == 0 || i == tamaño - 1 || j == 0 || j == tamaño - 1)
+            string celda = celdas[i, j];
+            string celdaConColor = celda;
+
+            // Aplicar colores según el contenido de la celda
+            if (celda == "■") // Obstáculo
             {
-                row.Add(celdas[i, j].ToString());
+                celdaConColor = $"[grey93]{celda}[/]";
             }
-            else
+            else if (celda == "+") // Salida
             {
-                row.Add(celdas[i, j].ToString());
+                celdaConColor = $"[green]{celda}[/]";
             }
+            else if (celda == "X" || celda == "!" || celda == "~") // Trampas (WindTrap, RootTrap, JotunheimTrap)
+            {
+                celdaConColor = $"[blue]{celda}[/]";
+            }
+            
+
+            row.Add(celdaConColor);
         }
         table.AddRow(row.ToArray());
     }
@@ -233,16 +244,15 @@ public class Tablero
     // Configuración del borde
     table.Border(TableBorder.Simple); // Desactivar bordes predeterminados
     table.BorderStyle = new Style(Color.Yellow);
-    
 
-        AnsiConsole.Render(table);
-        
-        // Mostrar estado de las fichas
-        foreach (var ficha in fichas)
-        {
-            AnsiConsole.MarkupLine($"[bold green]{ficha.Nombre}[/] está en ({ficha.PosicionX}, {ficha.PosicionY})");
-        }
+    AnsiConsole.Write(table);
+
+    // Mostrar estado de las fichas
+    foreach (var ficha in fichas)
+    {
+        AnsiConsole.MarkupLine($"[bold green]{ficha.Nombre}[/] está en ({ficha.PosicionX}, {ficha.PosicionY})");
     }
+}
     
 
     

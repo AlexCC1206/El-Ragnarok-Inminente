@@ -201,7 +201,7 @@ public class Juego
             // Usar la habilidad seleccionada
             habilidad.Usar(ficha);
             AnsiConsole.MarkupLine($"[green]{jugador.Nombre} ha usado la habilidad {habilidad.Nombre} con {ficha.Nombre}.[/]");
-            System.Threading.Thread.Sleep(3000);
+            System.Threading.Thread.Sleep(2000);
         }
         else
         {

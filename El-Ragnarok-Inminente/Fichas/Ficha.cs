@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 public abstract class Ficha
 {
@@ -15,8 +16,9 @@ public abstract class Ficha
     public int TiempoInmovilizacion { get; set; }
     public int PosicionX { get; set; }
     public int PosicionY { get; set; }
+    public Color Color  { get; set; }
 
-    public Ficha(string nombre,int vida, int velocidad, string simbolo)
+    public Ficha(string nombre,int vida, int velocidad, string simbolo, Color color)
     {
         Nombre = nombre;
         Vida = vida;
@@ -26,6 +28,7 @@ public abstract class Ficha
         Paralizado = false;
         Invisible = false;
         Habilidades = new List<Habilidad>();
+        Color = color;
     }
 
     public void ReducirEnfriamientoHabilidades()

@@ -6,16 +6,32 @@ public static class InterfazJuego
 {   
     public static void MostrarMenuPrincipal()
     {   
+        // Configurar el estilo de fondo oscuro
+        //var estiloFondoOscuro = new Style(foreground: Color.White, background: Color.FromInt32(0x1A1A1A));
+        
         AnsiConsole.Clear();
+        //AnsiConsole.Console.Style = estiloFondoOscuro;
+        
+        var title = new FigletText("El Ragnarok Inminente")
+            .Color(Color.DarkGoldenrod) // Dorado brillante (#FFD700)
+            .Centered();
+        
+        var shadowedTitle = new Panel(title)
+            .BorderColor(Color.Violet) // Borde azul para un toque místico
+            .Padding(2, 2, 2, 2)
+            .RoundedBorder()
+            .Border(BoxBorder.Double);
+            //.Style(new Style(foreground: Color.Gold1, background: Color.Black)) // Fondo negro para contraste
+            //.Header("[bold red]El Ragnarok Inminente[/]"); // Sombra roja integrada en el título
 
-        AnsiConsole.Write(new FigletText("El Ragnarok Inminente!")
-            .Centered()
-            .Color(Color.Red));
+        // Mostrar el diseño
+        AnsiConsole.Write(shadowedTitle);
             
         var opciones = new[] { "Nueva Partida", "Instrucciones", "Salir" };
         var prompt = new SelectionPrompt<string>()
-            .Title("[bold yellow]Menú Principal[/]")
+            .Title("[bold darkorange3]Menú Principal[/]")
             .AddChoices(opciones);
+
         var opcionSeleccionada = AnsiConsole.Prompt(prompt);
 
         switch (opcionSeleccionada)
@@ -27,7 +43,7 @@ public static class InterfazJuego
                 MostrarInstrucciones();
                 break;
             case "Salir":
-                AnsiConsole.MarkupLine("[bold red]¡Gracias por jugar![/]");
+                AnsiConsole.MarkupLine("[bold darkred_1]¡Gracias por jugar![/]");
                 Environment.Exit(0);
                 break;
         }
@@ -35,9 +51,31 @@ public static class InterfazJuego
     /*
     public static void MostrarTitulo()
     {
-        AnsiConsole.Write(new FigletText("El Ragnarok Inminente!")
-            .Centered()
-            .Color(Color.Red));
+        var title = new FigletText("El Ragnarok Inminente")
+        .Color(Color.Gold1) // Dorado brillante (#FFD700)
+        .Centered();
+
+        var panel = new Panel(title)
+        .BorderColor(Color.Blue) // Borde azul para un toque místico
+        .Header("[bold yellow]Bienvenido al Ragnarok[/]") // Texto de bienvenida en amarillo
+        .Padding(2, 2, 2, 2)
+        .RoundedBorder()
+        .Border(BoxBorder.Double);
+
+        // Añadir sombra y efectos al título
+        var shadowEffect = new Markup("[red]El Ragnarok Inminente[/]") // Sombra roja
+        .Overflow(Overflow.Ellipsis)
+        .Alignment(Justify.Center);
+
+        // Combinar todo en un layout
+        var layout = new Layout("Root")
+        .SplitRows(
+        new Layout("Title").Update(panel),
+        new Layout("Shadow").Update(shadowEffect)
+    );
+
+// Mostrar el diseño
+AnsiConsole.Write(layout);
             
     }
 
@@ -100,18 +138,17 @@ public static class InterfazJuego
 
     public static void MostrarInstrucciones()
     {
-        var reglas = new Rule("[yellow]Instrucciones del Juego[/]");
+        var reglas = new Rule("[grey82]Instrucciones del Juego[/]");
         AnsiConsole.Write(reglas);
 
         var panel = new Panel(@"
         1. Usa WASD para mover la ficha (Jugador 1) o las flechas (Jugador 2).
-        2. Presiona Spacebar (Jugador 1) o Enter (Jugador 2) para usar la habilidad.
-        3. Evita las trampas y obstáculos para llegar a la salida.
-        4. ¡Diviértete!
-        5. [bold yellow]Presiona cualquier tecla para volver al menú principal...[/]
+        2. Evita las trampas y obstáculos para llegar a la salida.
+        3. ¡Diviértete!
+        4. [bold yellow]Presiona cualquier tecla para volver al menú principal...[/]
         ")
-        .BorderColor(Color.Blue)
-        .Header("[bold yellow]Instrucciones del Juego[/]");
+        .BorderColor(Color.DarkGreen)
+        .Header("[cyan3]Instrucciones del Juego[/]");
 
         AnsiConsole.Write(panel);
 
@@ -128,10 +165,10 @@ public static class InterfazJuego
             .AddRow("F", "Ficha")
             .AddRow("!", "Trampa")
             .AddRow("■", "Obstáculo"))
-        .Header("Leyenda")
-        .BorderColor(Color.Blue);
+        .Header("[cyan3]Leyenda[/]")
+        .BorderColor(Color.DarkGreen);
 
-        AnsiConsole.Render(leyenda);
+        AnsiConsole.Write(leyenda);
     }
 /*
     public static void MostrarInformacionJugador(Jugador jugador, Ficha ficha)
@@ -154,7 +191,7 @@ public static class InterfazJuego
             .Title("Opciones:")
             .AddChoices(opciones);
         var opcionSeleccionada = AnsiConsole.Prompt(prompt);
-        AnsiConsole.MarkupLine($"Has seleccionado: [yellow]{opcionSeleccionada}[/]");
+        AnsiConsole.MarkupLine($"Has seleccionado: [white]{opcionSeleccionada}[/]");
         
         return opcionSeleccionada;
     }
@@ -164,13 +201,13 @@ public static class InterfazJuego
         switch (tipo)
         {
             case "negativo":
-                AnsiConsole.MarkupLine($"[bold red]{mensaje}[/]");
+                AnsiConsole.MarkupLine($"[bold darkred_1]{mensaje}[/]");
                 break;
             case "exitoso":
-                AnsiConsole.MarkupLine($"[bold green]{mensaje}[/]");
+                AnsiConsole.MarkupLine($"[bold springgreen2_1]{mensaje}[/]");
                 break;
             case "alerta":
-                AnsiConsole.MarkupLine($"[bold yellow]{mensaje}[/]");
+                AnsiConsole.MarkupLine($"[bold yellow3_1]{mensaje}[/]");
                 break;
             default:
                 AnsiConsole.MarkupLine(mensaje);
@@ -191,6 +228,10 @@ public static class InterfazJuego
         jugador.Fichas.Clear();
         jugador.AñadirFicha(fichaSeleccionada);
     }
+    
+
+    
+
     /*
     public void MostrarIndicadoresVisuales()
     {
