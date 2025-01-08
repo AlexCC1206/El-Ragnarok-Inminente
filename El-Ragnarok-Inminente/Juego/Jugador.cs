@@ -4,7 +4,8 @@ public class Jugador
 {
     public string Nombre { get; set; }
     public List<Ficha> Fichas { get; set; }
-
+    
+    
     public Jugador(string nombre)
     {
         Nombre = nombre;
@@ -15,4 +16,6 @@ public class Jugador
     {
         Fichas.Add(ficha);
     }
+
+    
 }

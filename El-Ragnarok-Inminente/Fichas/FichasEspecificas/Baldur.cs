@@ -2,7 +2,7 @@ using System;
 
 public class Baldur : Ficha
 {
-    public Baldur() : base("Baldur, el Dios de la Luz", 3, 'B')
+    public Baldur() : base("Baldur, el Dios de la Luz", 100, 3, "B")
     {
         Habilidades.Add(new ResilienciaInmortal());
     }
@@ -11,7 +11,7 @@ public class Baldur : Ficha
     {
         if (indice >= 0 && indice < Habilidades.Count)
         {
-            Habilidades[indice].Usar(this, this);
+            Habilidades[indice].Usar(this);
         }
     }
 }

@@ -6,14 +6,13 @@ public class JusticiaImplacable : Habilidad
     {
     }
 
-    public override void Usar(Ficha ficha, Ficha objetivo)
+    public override void Usar(Ficha ficha)
     {
         if (EstaDisponible())
         {
             TurnosRestantes = Enfriamiento;
-            objetivo.Velocidad = 1; // Reduce la velocidad de la ficha objetivo a 1
-            objetivo.Paralizado = true; // Marca a la ficha objetivo como inmovilizada
-            Console.WriteLine($"{ficha.Nombre} usa {Nombre} y reduce la velocidad de {objetivo.Nombre} a 1 casilla por turno durante los próximos 2 turnos.");
+            ficha.Velocidad += 2;
+            Console.WriteLine($"{ficha.Nombre} usa {Nombre} y aumenta su velocidad en 2 casillas por turno durante los próximos 2 turnos.");
         }
         else
         {

@@ -2,7 +2,7 @@ using System;
 
 public class Odin : Ficha
 {
-    public Odin() : base("Odin, el Padre de Todos", 2, 'O')
+    public Odin() : base("Odin, el Padre de Todos", 150, 2, "O")
     {  
         Habilidades.Add(new RayoDeOdin());
     }
@@ -11,7 +11,7 @@ public class Odin : Ficha
     {
         if (indice >= 0 && indice < Habilidades.Count)
         {
-            Habilidades[indice].Usar(this, this);
+            Habilidades[indice].Usar(this);
         }
     }
 }

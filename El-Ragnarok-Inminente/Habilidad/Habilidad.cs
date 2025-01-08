@@ -13,7 +13,7 @@ public abstract class Habilidad
         TurnosRestantes = 0;
     }
 
-    public abstract void Usar(Ficha ficha, Ficha objetivo);
+    public abstract void Usar(Ficha ficha);
 
     public void ReducirEnfriamiento()
     {

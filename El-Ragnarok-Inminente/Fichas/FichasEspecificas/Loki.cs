@@ -2,7 +2,7 @@ using System;
 
 public class Loki : Ficha
 {
-    public Loki() : base("Loki, el Embaucador", 3, 'L')
+    public Loki() : base("Loki, el Embaucador", 120, 3, "L")
     {
         Habilidades.Add(new IlusionSombria());
     }
@@ -11,7 +11,7 @@ public class Loki : Ficha
     {
         if (indice >= 0 && indice < Habilidades.Count)
         {
-            Habilidades[indice].Usar(this, this);
+            Habilidades[indice].Usar(this);
         }
     }
 }

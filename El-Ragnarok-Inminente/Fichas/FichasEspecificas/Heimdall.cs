@@ -2,7 +2,7 @@ using System;
 
 public class Heimdall : Ficha
 {
-    public Heimdall() : base("Heimdall, el Guardián de Asgard", 3, 'H')
+    public Heimdall() : base("Heimdall, el Guardián de Asgard", 140, 3, "H")
     {
         Habilidades.Add(new VisionProfetica());
     }
@@ -11,7 +11,7 @@ public class Heimdall : Ficha
     {
         if (indice >= 0 && indice < Habilidades.Count)
         {
-            Habilidades[indice].Usar(this, this);
+            Habilidades[indice].Usar(this);
         }
     }
 }

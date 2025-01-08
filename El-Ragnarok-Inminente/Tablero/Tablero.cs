@@ -3,17 +3,18 @@ using Spectre.Console;
 
 public class Tablero
 {
-    public char[,] celdas;
+    public string[,] celdas;
     public int tamaño;
     private Random random;
     private List<Trampa> trampas;
     private List<Ficha> fichas;
     private (int, int) salida; // Coordenadas de la salida
+    
 
     public Tablero(int n)
     {
         tamaño = n;
-        celdas = new char[n, n];
+        celdas = new string[n, n];
         random = new Random();
         trampas = new List<Trampa>();
         fichas = new List<Ficha>();
@@ -28,17 +29,17 @@ public class Tablero
         {
             for (int j = 0; j < tamaño; j++)
             {
-                celdas[i, j] = ' '; 
+                celdas[i, j] = " "; 
             }
         }
 
         // Establece los bordes como obstáculos
         for (int i = 0; i < tamaño; i++)
         {
-            celdas[0, i] = '■'; // Primera fila
-            celdas[tamaño - 1, i] = '■'; // Última fila
-            celdas[i, 0] = '■'; // Primera columna
-            celdas[i, tamaño - 1] = '■'; // Última columna
+            celdas[0, i] = "■"; // Primera fila
+            celdas[tamaño - 1, i] = "■"; // Última fila
+            celdas[i, 0] = "■"; // Primera columna
+            celdas[i, tamaño - 1] = "■"; // Última columna
         }
 
         AñadirObstaculos();
@@ -52,7 +53,7 @@ public class Tablero
         int y = 10;
 
         salida = (x, y);
-        celdas[x, y] = '+'; // Representa la salida con 'S'
+        celdas[x, y] = "+"; // Representa la salida con 'S'
     }
 
     private void AñadirObstaculos()
@@ -65,9 +66,9 @@ public class Tablero
             {
                 x = random.Next(1, tamaño - 1); // Evita los bordes
                 y = random.Next(1, tamaño - 1); // Evita los bordes
-            } while (celdas[x, y] != ' ' || !EsAccesible(x, y)); // Asegura que no se sobreescriba un obstáculo existente y que el tablero siga siendo accesible
+            } while (celdas[x, y] != " " || !EsAccesible(x, y)); // Asegura que no se sobreescriba un obstáculo existente y que el tablero siga siendo accesible
 
-            celdas[x, y] = '■'; // Representa un obstáculo con '#'
+            celdas[x, y] = "■"; // Representa un obstáculo con '#'
         }
     }
 
@@ -81,7 +82,7 @@ public class Tablero
             {
                 x = random.Next(1, tamaño - 1); // Evita los bordes
                 y = random.Next(1, tamaño - 1); // Evita los bordes
-            } while (celdas[x, y] != ' ' || !EsAccesible(x, y)); // Asegura que no se sobreescriba una trampa existente y que el tablero siga siendo accesible
+            } while (celdas[x, y] != " " || !EsAccesible(x, y)); // Asegura que no se sobreescriba una trampa existente y que el tablero siga siendo accesible
 
             Trampa trampa = GenerarTrampaAleatoria();
             trampa.PosicionX = x;
@@ -110,20 +111,20 @@ public class Tablero
     private bool EsAccesible(int obstaculoX, int obstaculoY)
     {
         // Temporarily place the obstacle
-        celdas[obstaculoX, obstaculoY] = '■';
+        celdas[obstaculoX, obstaculoY] = "■";
 
         // Check if there's a path from (1, 1) to (tamaño-2, tamaño-2)
         bool accesible = HayCamino(1, 1, tamaño - 2, tamaño - 2);
 
         // Remove the temporary obstacle
-        celdas[obstaculoX, obstaculoY] = ' ';
+        celdas[obstaculoX, obstaculoY] = " ";
 
         return accesible;
     }
 
     public bool HayCamino(int startX, int startY, int endX, int endY)
     {
-        if (celdas[startX, startY] == '■' || celdas[endX, endY] == '■')
+        if (celdas[startX, startY] == "■" || celdas[endX, endY] == "■")
             return false;
 
         bool[,] visitado = new bool[tamaño, tamaño];
@@ -145,7 +146,7 @@ public class Tablero
                 int nuevoX = x + dx[i];
                 int nuevoY = y + dy[i];
 
-                if (nuevoX >= 0 && nuevoX < tamaño && nuevoY >= 0 && nuevoY < tamaño && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != '■')
+                if (nuevoX >= 0 && nuevoX < tamaño && nuevoY >= 0 && nuevoY < tamaño && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != "■")
                 {
                     cola.Enqueue((nuevoX, nuevoY));
                     visitado[nuevoX, nuevoY] = true;
@@ -155,7 +156,7 @@ public class Tablero
         
         return false;
     }
-
+    /*
     public bool ValidarAccesibilidad()
     {
         bool[,] visitado = new bool[tamaño, tamaño];
@@ -175,7 +176,7 @@ public class Tablero
                 int nuevoX = x + dx[i];
                 int nuevoY = y + dy[i];
 
-                if (nuevoX >= 1 && nuevoX < tamaño - 1 && nuevoY >= 1 && nuevoY < tamaño - 1 && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != '■')
+                if (nuevoX >= 1 && nuevoX < tamaño - 1 && nuevoY >= 1 && nuevoY < tamaño - 1 && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != "■")
                 {
                     cola.Enqueue((nuevoX, nuevoY));
                     visitado[nuevoX, nuevoY] = true;
@@ -188,7 +189,7 @@ public class Tablero
         {
             for (int j = 1; j < tamaño - 1; j++)
             {
-                if (celdas[i, j] == ' ' && !visitado[i, j])
+                if (celdas[i, j] == " " && !visitado[i, j])
                 {
                     return false;
                 }
@@ -197,24 +198,52 @@ public class Tablero
 
         return true;
     }
-
+    */
     public void Imprimir()
     {
+        var table = new Table().Border(TableBorder.None)
+        .Title("[bold yellow]Tablero del Juego[/]")
+        .HideHeaders();
+
+        // Definir las columnas de la tabla
         for (int i = 0; i < tamaño; i++)
         {
-            for (int j = 0; j < tamaño; j++)
-            {
-                Console.Write(celdas[i, j] + " ");
-            }
-            Console.WriteLine();
+            table.AddColumn(new TableColumn(" "));
         }
 
+        // Agregar filas a la tabla
+        for (int i = 0; i < tamaño; i++)
+        {
+            var row = new List<string>();
+        for (int j = 0; j < tamaño; j++)
+        {
+            // Si es la primera o última fila, o la primera o última columna, mostrar el borde
+            if (i == 0 || i == tamaño - 1 || j == 0 || j == tamaño - 1)
+            {
+                row.Add(celdas[i, j].ToString());
+            }
+            else
+            {
+                row.Add(celdas[i, j].ToString());
+            }
+        }
+        table.AddRow(row.ToArray());
+    }
+
+    // Configuración del borde
+    table.Border(TableBorder.Simple); // Desactivar bordes predeterminados
+    table.BorderStyle = new Style(Color.Yellow);
+    
+
+        AnsiConsole.Render(table);
+        
         // Mostrar estado de las fichas
         foreach (var ficha in fichas)
         {
-            AnsiConsole.MarkupLine($"[bold]{ficha.Nombre}[/] está en ({ficha.PosicionX}, {ficha.PosicionY})");
+            AnsiConsole.MarkupLine($"[bold green]{ficha.Nombre}[/] está en ({ficha.PosicionX}, {ficha.PosicionY})");
         }
     }
+    
 
     
     public void AñadirFicha(Ficha ficha, int x, int y)
@@ -230,7 +259,7 @@ public class Tablero
     {
         if (EsMovimientoValido(ficha, nuevaX, nuevaY))
         {
-            celdas[ficha.PosicionX, ficha.PosicionY] = ' '; // Limpia la posición anterior
+            celdas[ficha.PosicionX, ficha.PosicionY] = " "; // Limpia la posición anterior
             ficha.PosicionX = nuevaX;
             ficha.PosicionY = nuevaY;
             celdas[nuevaX, nuevaY] = ficha.Simbolo; // Coloca la ficha en la nueva posición
@@ -242,7 +271,7 @@ public class Tablero
         }
     }
 
-    private bool EsMovimientoValido(Ficha ficha, int nuevaX, int nuevaY)
+    public bool EsMovimientoValido(Ficha ficha, int nuevaX, int nuevaY)
     {
         // Verifica que la nueva posición esté dentro de los límites del tablero
         if (nuevaX < 0 || nuevaX >= tamaño || nuevaY < 0 || nuevaY >= tamaño)
@@ -251,7 +280,7 @@ public class Tablero
         }
 
         // Verifica que la nueva posición no esté bloqueada por un obstáculo
-        if (celdas[nuevaX, nuevaY] == '■')
+        if (celdas[nuevaX, nuevaY] == "■")
         {
             return false;
         }
@@ -266,6 +295,19 @@ public class Tablero
         return true;
     }
 
+    private void AplicarEfectoTrampa(Ficha ficha)
+    {
+        foreach (var trampa in trampas)
+        {
+            if (ficha.PosicionX == trampa.PosicionX && ficha.PosicionY == trampa.PosicionY)
+            {
+                AnsiConsole.MarkupLine($"[red]{ficha.Nombre} ha caído en una trampa![/]");
+                trampa.Activar(ficha);
+                //System.Threading.Thread.Sleep(3000);
+            }
+        }
+    }
+    /*
     private void AplicarEfectoTrampa(Ficha ficha)
     {
         foreach (var trampa in trampas)
@@ -297,6 +339,7 @@ public class Tablero
             }
         }
     }
+    */
     public bool EsSalida(int x, int y)
     {
         return salida.Item1 == x && salida.Item2 == y;

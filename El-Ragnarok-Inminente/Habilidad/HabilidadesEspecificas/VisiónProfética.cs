@@ -6,7 +6,7 @@ public class VisionProfetica : Habilidad
     {
     }
 
-    public override void Usar(Ficha ficha, Ficha objetivo)
+    public override void Usar(Ficha ficha)
     {
         if (EstaDisponible())
         {

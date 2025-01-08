@@ -6,13 +6,13 @@ public class RayoDeOdin : Habilidad
     {
     }
 
-    public override void Usar(Ficha ficha, Ficha objetivo)
+    public override void Usar(Ficha ficha)
     {
         if (EstaDisponible())
         {
             TurnosRestantes = Enfriamiento;
-            objetivo.Paralizado = true; // Marca a la ficha objetivo como paralizada
-            Console.WriteLine($"{ficha.Nombre} usa {Nombre} y paraliza a {objetivo.Nombre} durante un turno.");
+            ficha.Velocidad += 3; // Aumenta la velocidad en 3 puntos
+            Console.WriteLine($"{ficha.Nombre} usa {Nombre} y aumenta su velocidad en 3 puntos durante 2 turnos.");
         }
         else
         {

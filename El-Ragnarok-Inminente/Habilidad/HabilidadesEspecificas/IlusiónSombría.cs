@@ -6,13 +6,13 @@ public class IlusionSombria : Habilidad
     {
     }
 
-    public override void Usar(Ficha ficha, Ficha objetivo)
+    public override void Usar(Ficha ficha)
     {
         if (EstaDisponible())
         {
             TurnosRestantes = Enfriamiento;
-            ficha.InmuneAInteracciones = true; // Marca a la ficha como inmune a interacciones
-            Console.WriteLine($"{ficha.Nombre} usa {Nombre} y evita ser atacado o bloqueado durante el próximo turno.");
+            ficha.Invisible = true; // Nueva propiedad en Ficha
+            Console.WriteLine($"{ficha.Nombre} usa {Nombre} y se vuelve invisible durante el próximo turno.");
         }
         else
         {
