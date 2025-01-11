@@ -23,34 +23,9 @@ public class Juego
 
         //InicializarFichas(jugadores);
     }
-    /*
-     private void InicializarFichas(List<Jugador> jugadores)
-    {
-        Jugador jugador1 = jugadores[0];
-        Jugador jugador2 = jugadores[1];
-
-        // Selección de ficha para Jugador 1
-        var prompt1 = new SelectionPrompt<string>()
-            .Title($"{jugador1.Nombre}, selecciona una ficha:")
-            .AddChoices(jugador1.Fichas.ConvertAll(f => f.Nombre));
-        string seleccion1 = AnsiConsole.Prompt(prompt1);
-        fichaJugador1 = jugador1.Fichas.Find(f => f.Nombre == seleccion1);
-        tablero.AñadirFicha(fichaJugador1, 1, 1);
-
-        // Selección de ficha para Jugador 2
-        var prompt2 = new SelectionPrompt<string>()
-            .Title($"{jugador2.Nombre}, selecciona una ficha:")
-            .AddChoices(jugador2.Fichas.ConvertAll(f => f.Nombre));
-        string seleccion2 = AnsiConsole.Prompt(prompt2);
-        fichaJugador2 = jugador2.Fichas.Find(f => f.Nombre == seleccion2);
-        tablero.AñadirFicha(fichaJugador2, tablero.tamaño - 2, tablero.tamaño - 2);
-    }
-    */
+    
     public void Iniciar()
-    {
-        //AnsiConsole.MarkupLine("[bold]Instrucciones:[/]");
-        //AnsiConsole.MarkupLine("Usa WASD para mover la ficha (Jugador 1) o las flechas (Jugador 2). Presiona Spacebar (Jugador 1) o Enter (Jugador 2) para usar la habilidad.");
-        
+    {   
         while (true)
         {
             Jugador jugadorActual = turno.ObtenerJugadorActual();

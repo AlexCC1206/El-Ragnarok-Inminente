@@ -14,13 +14,13 @@ public class JotunheimTrap : Trampa
             ficha.Velocidad = 1; // Reduce la velocidad de la ficha
             Console.WriteLine($"{ficha.Nombre} se ralentiza debido a las Piedras de Jotunheim. Turnos restantes: {turnosRestantes}");
             turnosRestantes--; // Reduce el contador de turnos
-            
+            //System.Threading.Thread.Sleep(2000);
 
         }
         else
         {
             Console.WriteLine($"{ficha.Nombre} ya no está afectado por las Piedras de Jotunheim.");
         }      
-        System.Threading.Thread.Sleep(2000);     
+             
     }
 }

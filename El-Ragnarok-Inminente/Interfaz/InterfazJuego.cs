@@ -1,52 +1,71 @@
 using System;
 using System.Collections.Generic;
 using Spectre.Console;
+using Spectre.Console.Rendering;
 
 public static class InterfazJuego
 {   
+    /*
+    public static void MostrarTextoAnimado(string texto, Color color, int delay = 100)
+    {
+        foreach (char c in texto)
+        {
+            AnsiConsole.Markup($"[{color}]{c}[/]");
+            System.Threading.Thread.Sleep(delay); // Controla la velocidad de la animación
+        }
+        AnsiConsole.WriteLine(); // Salto de línea al final
+    }
+    */
+
     public static void MostrarMenuPrincipal()
     {   
-        // Configurar el estilo de fondo oscuro
-        //var estiloFondoOscuro = new Style(foreground: Color.White, background: Color.FromInt32(0x1A1A1A));
+        //try
+        //{        
+            AnsiConsole.Clear();
         
-        AnsiConsole.Clear();
-        //AnsiConsole.Console.Style = estiloFondoOscuro;
+            var title = new FigletText("El Ragnarok Inminente")
+                .Color(Color.DarkGoldenrod) 
+                .Centered();
         
-        var title = new FigletText("El Ragnarok Inminente")
-            .Color(Color.DarkGoldenrod) // Dorado brillante (#FFD700)
-            .Centered();
-        
-        var shadowedTitle = new Panel(title)
-            .BorderColor(Color.Violet) // Borde azul para un toque místico
-            .Padding(2, 2, 2, 2)
-            .RoundedBorder()
-            .Border(BoxBorder.Double);
-            //.Style(new Style(foreground: Color.Gold1, background: Color.Black)) // Fondo negro para contraste
-            //.Header("[bold red]El Ragnarok Inminente[/]"); // Sombra roja integrada en el título
-
-        // Mostrar el diseño
-        AnsiConsole.Write(shadowedTitle);
+            var shadowedTitle = new Panel(title)
+                .BorderColor(Color.Violet) 
+                .Padding(2, 2, 2, 2)
+                .RoundedBorder()
+                .Border(BoxBorder.Double);
             
-        var opciones = new[] { "Nueva Partida", "Instrucciones", "Salir" };
-        var prompt = new SelectionPrompt<string>()
-            .Title("[bold darkorange3]Menú Principal[/]")
-            .AddChoices(opciones);
 
-        var opcionSeleccionada = AnsiConsole.Prompt(prompt);
+                // Mostrar el diseño
+            AnsiConsole.Write(shadowedTitle);
+            
+            var opciones = new[] { "Nueva Partida", "Instrucciones", "Salir" };
+            var prompt = new SelectionPrompt<string>()
+                .Title("[bold cyan3]Menú Principal[/]")
+                .AddChoices(opciones);
 
-        switch (opcionSeleccionada)
-        {
-            case "Nueva Partida":
-                IniciarNuevaPartida();
-                break;
-            case "Instrucciones":
-                MostrarInstrucciones();
-                break;
-            case "Salir":
-                AnsiConsole.MarkupLine("[bold darkred_1]¡Gracias por jugar![/]");
-                Environment.Exit(0);
-                break;
+            var opcionSeleccionada = AnsiConsole.Prompt(prompt);
+
+            switch (opcionSeleccionada)
+            {
+                case "Nueva Partida":
+                    IniciarNuevaPartida();
+                    break;
+                case "Instrucciones":
+                    MostrarInstrucciones();
+                    break;
+                case "Salir":
+                    AnsiConsole.MarkupLine("[bold darkred_1]¡Gracias por jugar![/]");
+                    Environment.Exit(0);
+                    break;
+            }
+            /*
         }
+        catch (Exception ex)
+        {
+            AnsiConsole.MarkupLine($"[red]Error en el menú: {ex.Message}[/]");
+            AnsiConsole.MarkupLine("[yellow]Volviendo al menú principal...[/]");
+            MostrarMenuPrincipal();
+        }   
+        */
     }
     /*
     public static void MostrarTitulo()
@@ -112,33 +131,44 @@ AnsiConsole.Write(layout);
 
     private static void IniciarNuevaPartida()
     {      
-        Tablero tablero = new Tablero(21);
-        Jugador jugador1 = new Jugador("Jugador 1");
-        Jugador jugador2 = new Jugador("Jugador 2");
+        //try
+        //{
+            Tablero tablero = new Tablero(21);
+            Jugador jugador1 = new Jugador("Jugador 1");
+            Jugador jugador2 = new Jugador("Jugador 2");
 
-        // Añadir fichas a los jugadores
-        jugador1.AñadirFicha(new Loki());
-        jugador1.AñadirFicha(new Odin());
-        jugador1.AñadirFicha(new Baldur());
-        jugador1.AñadirFicha(new Heimdall());
-        jugador1.AñadirFicha(new Tyr());
+            // Añadir fichas a los jugadores
+            jugador1.AñadirFicha(new Loki());
+            jugador1.AñadirFicha(new Odin());
+            jugador1.AñadirFicha(new Baldur());
+            jugador1.AñadirFicha(new Heimdall());
+            jugador1.AñadirFicha(new Tyr());
 
-        jugador2.AñadirFicha(new Loki());
-        jugador2.AñadirFicha(new Odin());
-        jugador2.AñadirFicha(new Baldur());
-        jugador2.AñadirFicha(new Heimdall());
-        jugador2.AñadirFicha(new Tyr());
+            jugador2.AñadirFicha(new Loki());
+            jugador2.AñadirFicha(new Odin());
+            jugador2.AñadirFicha(new Baldur());
+            jugador2.AñadirFicha(new Heimdall());
+            jugador2.AñadirFicha(new Tyr());
 
-        SeleccionarFicha(jugador1);
-        SeleccionarFicha(jugador2);
+            SeleccionarFicha(jugador1);
+            SeleccionarFicha(jugador2);
 
-        Juego juego = new Juego(tablero, new List<Jugador> { jugador1, jugador2 });
-        juego.Iniciar();
+            Juego juego = new Juego(tablero, new List<Jugador> { jugador1, jugador2 });
+            juego.Iniciar();
+        //}
+        /*
+        catch (Exception ex)
+        {
+            AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
+            AnsiConsole.MarkupLine("[yellow]Volviendo al menú principal...[/]");
+            MostrarMenuPrincipal();
+        }
+        */
     }
 
     public static void MostrarInstrucciones()
     {
-        var reglas = new Rule("[grey82]Instrucciones del Juego[/]");
+        var reglas = new Rule("[cyan3]Instrucciones del Juego[/]");
         AnsiConsole.Write(reglas);
 
         var panel = new Panel(@"
@@ -147,8 +177,8 @@ AnsiConsole.Write(layout);
         3. ¡Diviértete!
         4. [bold yellow]Presiona cualquier tecla para volver al menú principal...[/]
         ")
-        .BorderColor(Color.DarkGreen)
-        .Header("[cyan3]Instrucciones del Juego[/]");
+        .BorderColor(Color.DeepSkyBlue1)
+        .Header("[cyan3]Reglas[/]");
 
         AnsiConsole.Write(panel);
 
@@ -161,29 +191,32 @@ AnsiConsole.Write(layout);
         var leyenda = new Panel(new Table()
             .AddColumn("Símbolo")
             .AddColumn("Descripción")
-            .AddRow("+", "Salida")
-            .AddRow("F", "Ficha")
-            .AddRow("!", "Trampa")
-            .AddRow("■", "Obstáculo"))
+            .AddRow("[bold gold1 on navy]+[/]", "Salida")
+            .AddRow("[deepskyblue1]F[/]", "Ficha")
+            .AddRow("[blink bold mediumpurple2]![/]", "Trampa")
+            .AddRow("[white]■[/]", "Obstáculo"))
         .Header("[cyan3]Leyenda[/]")
-        .BorderColor(Color.DarkGreen);
+        .BorderColor(Color.DeepSkyBlue1);
 
         AnsiConsole.Write(leyenda);
     }
 /*
-    public static void MostrarInformacionJugador(Jugador jugador, Ficha ficha)
+    public static Panel MostrarInformacionJugador(Jugador jugador)
     {
-        var infoJugador = new Panel(new Table()
-        .AddColumn("Información")
-        .AddRow($"Turno de: {jugador.Nombre}")
-        .AddRow($"Habilidades disponibles: {string.Join(", ", ficha.Habilidades)}")
-        .AddRow($"Enfriamiento restante: {ficha.ReducirEnfriamientoHabilidades}"))
-    .Header("Información del Jugador")
-    .BorderColor(Color.Green);
+        var panel = new Panel(new Table()
+            .AddColumn("Estadística")
+            .AddColumn("Valor")
+            .AddRow("Nombre", jugador.Nombre)
+            .AddRow("Salud", jugador.Salud.ToString())
+            .AddRow("Movimientos Restantes", jugador.MovimientosRestantes.ToString()))
+        .Header("[cyan3]Estadísticas en Tiempo Real[/]")
+        .BorderColor(Color.DeepSkyBlue1);
 
-    AnsiConsole.Render(infoJugador);
+        AnsiConsole.Write(panel);
+        return panel;
     }
 */
+
     public static string MostrarOpciones()
     {
         var opciones = new[] { "Moverse", "Usar habilidad", "Pasar turno" };
@@ -195,7 +228,7 @@ AnsiConsole.Write(layout);
         
         return opcionSeleccionada;
     }
-
+/*
     public static void MostrarMensajeEvento(string mensaje, string tipo)
     {
         switch (tipo)
@@ -214,14 +247,24 @@ AnsiConsole.Write(layout);
                 break;
         }
     }
+    */
 
     private static void SeleccionarFicha(Jugador jugador)
     {
         var prompt = new SelectionPrompt<string>()
             .Title($"{jugador.Nombre}, selecciona una ficha:")
             .AddChoices(jugador.Fichas.ConvertAll(f => f.Nombre));
+
         string seleccion = AnsiConsole.Prompt(prompt);
         Ficha fichaSeleccionada = jugador.Fichas.Find(f => f.Nombre == seleccion);
+        
+        if (fichaSeleccionada == null)
+        {
+            AnsiConsole.MarkupLine("[red]Error: La ficha seleccionada no es válida.[/]");
+            SeleccionarFicha(jugador); // Volver a solicitar la selección
+            return;
+        }
+
         AnsiConsole.MarkupLine($"[green]{jugador.Nombre} ha seleccionado a {fichaSeleccionada.Nombre}.[/]");
         
         // Limpiar fichas del jugador y añadir la ficha seleccionada

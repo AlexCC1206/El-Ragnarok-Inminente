@@ -17,13 +17,13 @@ public class RootTrap : Trampa
             int dano = 10; // Cantidad de daño fijo
             ficha.Vida -= dano; // Reducir la vida de la ficha
             Console.WriteLine($"{ficha.Nombre} ha sido herido por las Espinas de Hel. ¡Pierde {dano} puntos de vida!");
-            
+            //System.Threading.Thread.Sleep(2000);
         }
         else
         {
             Console.WriteLine($"{ficha.Nombre} evita las Espinas de Hel y no sufre daño.");
         }
-        System.Threading.Thread.Sleep(2000);
+        
     }
 }
     

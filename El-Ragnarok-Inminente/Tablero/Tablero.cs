@@ -10,6 +10,7 @@ public class Tablero
     private List<Trampa> trampas;
     private List<Ficha> fichas;
     private (int, int) salida; // Coordenadas de la salida
+    public List<Casilla> casillas { get; set; }
     
 
     public Tablero(int n)
@@ -19,6 +20,8 @@ public class Tablero
         random = new Random();
         trampas = new List<Trampa>();
         fichas = new List<Ficha>();
+        casillas = new List<Casilla>();
+
         Inicializar();
         GenerarSalida();
     }
@@ -45,6 +48,7 @@ public class Tablero
 
         AñadirObstaculos();
         AñadirTrampas();
+        AñadirCasillasBeneficios();
     }
 
     private void GenerarSalida()
@@ -55,6 +59,11 @@ public class Tablero
 
         salida = (x, y);
         celdas[x, y] = "+"; // Representa la salida con 'S'
+    }
+
+    public bool EsSalida(int x, int y)
+    {
+        return salida.Item1 == x && salida.Item2 == y;
     }
 
     private void AñadirObstaculos()
@@ -75,7 +84,7 @@ public class Tablero
 
     private void AñadirTrampas()
     {
-        int numTrampas = (tamaño - 2) * (tamaño - 2) * 15 / 100; // Ejemplo: 10% del tablero interno serán trampas
+        int numTrampas = (tamaño - 2) * (tamaño - 2) * 10 / 100; // Ejemplo: 10% del tablero interno serán trampas
         for (int i = 0; i < numTrampas; i++)
         {
             int x, y;
@@ -106,6 +115,66 @@ public class Tablero
                 return new JotunheimTrap();
             default:
                 return new WindTrap();
+        }
+    }
+
+    private void AplicarEfectoTrampa(Ficha ficha)
+    {
+        foreach (var trampa in trampas)
+        {
+            if (ficha.PosicionX == trampa.PosicionX && ficha.PosicionY == trampa.PosicionY)
+            {
+                AnsiConsole.MarkupLine($"[red]{ficha.Nombre} ha caído en una trampa![/]");
+                trampa.Activar(ficha);
+                System.Threading.Thread.Sleep(2000);
+            }
+        }
+    }
+
+    private void AñadirCasillasBeneficios()
+    {
+        int numCasillasBeneficios = (tamaño - 2) * (tamaño - 2) * 5 / 100; // Ejemplo: 10% del tablero interno serán casillas con beneficios
+        for (int i = 0; i < numCasillasBeneficios; i++)
+        {
+            int x, y;
+            do
+            {
+                x = random.Next(1, tamaño - 1); // Evita los bordes
+                y = random.Next(1, tamaño - 1); // Evita los bordes
+            } while (celdas[x, y] != " " || !EsAccesible(x, y)); // Asegura que no se sobreescriba una casilla existente y que el tablero siga siendo accesible
+
+            Casilla casilla = GenerarCasillaAleatoria();
+            casilla.PosicionX = x;
+            casilla.PosicionY = y;
+            celdas[x, y] = casilla.Simbolo; // Representa una casilla con su símbolo
+            casillas.Add(casilla);
+        }
+    }
+
+    private Casilla GenerarCasillaAleatoria()
+    {
+        int tipoCasilla = random.Next(2); // Puedes ajustar el número según la cantidad de tipos de casillas
+        switch (tipoCasilla)
+        {
+            case 0:
+                return new CasillaVelocidad(0, 0 , 2); // Aumenta velocidad
+            case 1:
+                return new CasillaHabilidad(0 , 0 , new JusticiaImplacable()); // Habilidad adicional
+            default:
+                return new CasillaVelocidad(0, 0, 2); // Por defecto, aumenta velocidad
+        }
+    }
+
+    private void AplicarEfectoCasillas(Ficha ficha)
+    {
+        foreach (var casilla in casillas)
+        {
+            if (ficha.PosicionX == casilla.PosicionX && ficha.PosicionY == casilla.PosicionY)
+            {
+                AnsiConsole.MarkupLine($"[green]{ficha.Nombre} ha caído en una casilla de beneficio![/]");
+                casilla.AplicarEfecto(ficha);
+                System.Threading.Thread.Sleep(2000);
+            }
         }
     }
 
@@ -157,102 +226,98 @@ public class Tablero
         
         return false;
     }
-    /*
-    public bool ValidarAccesibilidad()
-    {
-        bool[,] visitado = new bool[tamaño, tamaño];
-        Queue<(int, int)> cola = new Queue<(int, int)>();
-        cola.Enqueue((1, 1)); // Empieza desde (1, 1) para evitar los bordes
-        visitado[1, 1] = true;
-
-        int[] dx = { -1, 1, 0, 0 };
-        int[] dy = { 0, 0, -1, 1 };
-
-        while (cola.Count > 0)
-        {
-            var (x, y) = cola.Dequeue();
-
-            for (int i = 0; i < 4; i++)
-            {
-                int nuevoX = x + dx[i];
-                int nuevoY = y + dy[i];
-
-                if (nuevoX >= 1 && nuevoX < tamaño - 1 && nuevoY >= 1 && nuevoY < tamaño - 1 && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != "■")
-                {
-                    cola.Enqueue((nuevoX, nuevoY));
-                    visitado[nuevoX, nuevoY] = true;
-                }
-            }
-        }
-        
-        // Verifica que todas las celdas accesibles hayan sido visitadas
-        for (int i = 1; i < tamaño - 1; i++)
-        {
-            for (int j = 1; j < tamaño - 1; j++)
-            {
-                if (celdas[i, j] == " " && !visitado[i, j])
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-    */
+/*
     public void Imprimir()
-{
-    var table = new Table().Border(TableBorder.None)
-        .Title("[bold yellow]Tablero del Juego[/]")
-        .HideHeaders();
-
-    // Definir las columnas de la tabla
-    for (int i = 0; i < tamaño; i++)
     {
-        table.AddColumn(new TableColumn(" "));
+        for (int i = 0; i < tamaño; i++)
+        {
+            for (int j = 0; j < tamaño; j++)
+            {
+                Console.Write(celdas[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
     }
-
-    // Agregar filas a la tabla
+*/
+    
+    public void Imprimir()
+    {
+        
+        // Determinar el ancho máximo de los símbolos
+    int maxWidth = 1;
     for (int i = 0; i < tamaño; i++)
     {
-        var row = new List<string>();
         for (int j = 0; j < tamaño; j++)
         {
-            string celda = celdas[i, j];
-            string celdaConColor = celda;
-
-            // Aplicar colores según el contenido de la celda
-            if (celda == "■") // Obstáculo
+            if (celdas[i, j].Length > maxWidth)
             {
-                celdaConColor = $"[grey93]{celda}[/]";
+                maxWidth = celdas[i, j].Length;
             }
-            else if (celda == "+") // Salida
-            {
-                celdaConColor = $"[green]{celda}[/]";
-            }
-            else if (celda == "X" || celda == "!" || celda == "~") // Trampas (WindTrap, RootTrap, JotunheimTrap)
-            {
-                celdaConColor = $"[blue]{celda}[/]";
-            }
-            
-
-            row.Add(celdaConColor);
         }
-        table.AddRow(row.ToArray());
     }
+    
+        var table = new Table().Border(TableBorder.None)
+            .Title("[bold gold1]Tablero del Juego[/]")
+            .HideHeaders();
+        
 
-    // Configuración del borde
-    table.Border(TableBorder.Simple); // Desactivar bordes predeterminados
-    table.BorderStyle = new Style(Color.Yellow);
+        // Definir las columnas de la tabla
+        for (int i = 0; i < tamaño; i++)
+        {
+            table.AddColumn(new TableColumn(" "));//.Width(maxWidth + 2)); // +2 para espacios adicionales
+        }
 
-    AnsiConsole.Write(table);
+        // Agregar filas a la tabla
+        for (int i = 0; i < tamaño; i++)
+        {
+            var row = new List<string>();
+            for (int j = 0; j < tamaño; j++)
+            {
+                string celda = celdas[i, j];
+                string celdaConColor = celda;
 
-    // Mostrar estado de las fichas
-    foreach (var ficha in fichas)
-    {
-        AnsiConsole.MarkupLine($"[bold green]{ficha.Nombre}[/] está en ({ficha.PosicionX}, {ficha.PosicionY})");
+    
+                // Aplicar colores según el contenido de la celda
+                if (celda == "■") // Obstáculo
+                {
+                    celdaConColor = $"[white]{celda}[/]";
+                }
+                else if (celda == "+") // Salida
+                {
+                    celdaConColor = $"[bold gold1 on navy]{celda}[/]";
+                }
+                else if (celda == "X" || celda == "!" || celda == "~") 
+                {
+                    celdaConColor = $"[blink bold mediumpurple2]{celda}[/]";
+                }
+                else if(celda == "T" || celda == "H" || celda == "O" || celda == "L" || celda == "B")
+                {
+                    celdaConColor = $"[deepskyblue1]{celda}[/]";
+                }
+                else if (celda == "^" || celda == "*")
+                {
+                    celdaConColor = $"[bold orange3]{celda}[/]";
+                }
+                // Centrar el símbolo dentro de la celda
+                int padding = (maxWidth - celda.Length) / 2;
+                celdaConColor = celdaConColor.PadLeft(celdaConColor.Length + padding).PadRight(maxWidth + 2);
+
+                row.Add(celdaConColor);
+            }
+            table.AddRow(row.ToArray());
+        }
+
+        // Configuración del borde
+        table.Border(TableBorder.Simple); // Desactivar bordes predeterminados
+
+        AnsiConsole.Write(table);
+
+        // Mostrar estado de las fichas
+        foreach (var ficha in fichas)
+        {
+            AnsiConsole.MarkupLine($"{ficha.Nombre} está en ({ficha.PosicionX}, {ficha.PosicionY})");
+        }
     }
-}
     
 
     
@@ -267,6 +332,12 @@ public class Tablero
 
     public void MoverFicha(Ficha ficha, int nuevaX, int nuevaY)
     {
+        if (nuevaX < 0 || nuevaX >= tamaño || nuevaY < 0 || nuevaY >= tamaño)
+        {
+            AnsiConsole.MarkupLine("[red]Error: Movimiento fuera de los límites del tablero.[/]");
+            return;
+        }
+
         if (EsMovimientoValido(ficha, nuevaX, nuevaY))
         {
             celdas[ficha.PosicionX, ficha.PosicionY] = " "; // Limpia la posición anterior
@@ -304,54 +375,5 @@ public class Tablero
 
         return true;
     }
-
-    private void AplicarEfectoTrampa(Ficha ficha)
-    {
-        foreach (var trampa in trampas)
-        {
-            if (ficha.PosicionX == trampa.PosicionX && ficha.PosicionY == trampa.PosicionY)
-            {
-                AnsiConsole.MarkupLine($"[red]{ficha.Nombre} ha caído en una trampa![/]");
-                trampa.Activar(ficha);
-                //System.Threading.Thread.Sleep(3000);
-            }
-        }
-    }
-    /*
-    private void AplicarEfectoTrampa(Ficha ficha)
-    {
-        foreach (var trampa in trampas)
-        {
-            if (ficha.PosicionX == trampa.PosicionX && ficha.PosicionY == trampa.PosicionY)
-            {   
-                Console.WriteLine($"{ficha.Nombre} ha caído en una trampa!"); // Añadido mensaje de trampa
-                trampa.Activar(ficha); // Asegura que la trampa se active correctamente
-                // Aquí puedes agregar lógica para aplicar el efecto de la trampa a la ficha
-                // Por ejemplo, reducir velocidad, inmovilizar, etc.
-                if (trampa is WindTrap)
-                {
-                    // Lógica para WindTrap
-                    ficha.PosicionX -= 2; // Ejemplo: mueve la ficha dos casillas hacia atrás
-                    Console.WriteLine($"{ficha.Nombre} es empujado hacia atrás por el Viento de Jörmungandr.");
-                }
-                else if (trampa is RootTrap)
-                {
-                    // Lógica para RootTrap
-                    ficha.Inmovilizado = true; // Inmoviliza la ficha
-                    Console.WriteLine($"{ficha.Nombre} queda atrapado por las raíces de Yggdrasil.");
-                }
-                else if (trampa is JotunheimTrap)
-                {
-                    // Lógica para JotunheimTrap
-                    ficha.Velocidad = 1; // Reduce la velocidad de la ficha
-                    Console.WriteLine($"{ficha.Nombre} se ralentiza debido a las Piedras de Jotunheim.");
-                }
-            }
-        }
-    }
-    */
-    public bool EsSalida(int x, int y)
-    {
-        return salida.Item1 == x && salida.Item2 == y;
-    }
+    
 }

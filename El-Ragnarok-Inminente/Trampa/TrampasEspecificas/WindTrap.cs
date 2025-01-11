@@ -16,12 +16,12 @@ public class WindTrap : Trampa
             // Aplicar efecto de reducción de velocidad
             ficha.Velocidad /= 2; // Reduce la velocidad a la mitad
             Console.WriteLine($"{ficha.Nombre} ha sido afectado por el Viento de Jörmungandr. ¡Su velocidad se reduce a la mitad durante este turno!");
-            
+            //System.Threading.Thread.Sleep(2000);
         }
         else
         {
             Console.WriteLine($"{ficha.Nombre} resiste el efecto del Viento de Jörmungandr y continúa sin cambios.");
         }
-        System.Threading.Thread.Sleep(2000);
+        
     }
 }
