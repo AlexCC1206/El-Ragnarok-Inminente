@@ -157,38 +157,39 @@ public class Juego
     }
 
     private void UsarHabilidad(Ficha ficha, Jugador jugador)
-{
-    // Verificar si la ficha tiene habilidades disponibles
-    if (ficha.Habilidades.Count > 0)
     {
-        // Mostrar las habilidades disponibles
-        var prompt = new SelectionPrompt<string>()
-            .Title($"{jugador.Nombre}, selecciona una habilidad:")
-            .AddChoices(ficha.Habilidades.ConvertAll(h => h.Nombre));
-
-        string habilidadSeleccionada = AnsiConsole.Prompt(prompt);
-
-        // Encontrar la habilidad seleccionada
-        var habilidad = ficha.Habilidades.Find(h => h.Nombre == habilidadSeleccionada);
-
-        if (habilidad != null)
+        // Verificar si la ficha tiene habilidades disponibles
+        if (ficha.Habilidades.Count > 0)
         {
-            // Usar la habilidad seleccionada
-            habilidad.Usar(ficha);
-            AnsiConsole.MarkupLine($"[green]{jugador.Nombre} ha usado la habilidad {habilidad.Nombre} con {ficha.Nombre}.[/]");
-            System.Threading.Thread.Sleep(2000);
+            // Mostrar las habilidades disponibles
+            var prompt = new SelectionPrompt<string>()
+                .Title($"{jugador.Nombre}, selecciona una habilidad:")
+                .AddChoices(ficha.Habilidades.ConvertAll(h => h.Nombre));
+
+            string habilidadSeleccionada = AnsiConsole.Prompt(prompt);
+
+            // Encontrar la habilidad seleccionada
+            var habilidad = ficha.Habilidades.Find(h => h.Nombre == habilidadSeleccionada);
+
+            if (habilidad != null)
+            {
+                // Usar la habilidad seleccionada
+                habilidad.Usar(ficha);
+                AnsiConsole.MarkupLine($"[green]{jugador.Nombre} ha usado la habilidad {habilidad.Nombre} con {ficha.Nombre}.[/]");
+                //System.Threading.Thread.Sleep(2000);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[red]No se pudo encontrar la habilidad seleccionada.[/]");
+            }
         }
         else
         {
-            AnsiConsole.MarkupLine($"[red]No se pudo encontrar la habilidad seleccionada.[/]");
+            AnsiConsole.MarkupLine($"[red]{ficha.Nombre} no tiene habilidades disponibles.[/]");
         }
+        
+        InterfazJuego.MostrarOpciones();
     }
-    else
-    {
-        AnsiConsole.MarkupLine($"[red]{ficha.Nombre} no tiene habilidades disponibles.[/]");
-    }
-    
-}
 }
 
             /*

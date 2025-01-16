@@ -3,7 +3,7 @@ using System.Drawing;
 
 public class Heimdall : Ficha
 {
-    public Heimdall() : base("Heimdall, el Guardián de Asgard", 140, 3, "[H]", Color.Silver)
+    public Heimdall() : base("Heimdall, el Guardián de Asgard", 140, 3, "H", Color.Silver)
     {
         Habilidades.Add(new VisionProfetica());
     }

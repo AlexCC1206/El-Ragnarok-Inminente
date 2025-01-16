@@ -68,7 +68,7 @@ public class Tablero
 
     private void AñadirObstaculos()
     {
-        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 35 / 100; // Ejemplo: 20% del tablero serán obstáculos
+        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 30 / 100; // Ejemplo: 20% del tablero serán obstáculos
         for (int i = 0; i < numObstaculos; i++)
         {
             int x, y;
@@ -84,7 +84,7 @@ public class Tablero
 
     private void AñadirTrampas()
     {
-        int numTrampas = (tamaño - 2) * (tamaño - 2) * 10 / 100; // Ejemplo: 10% del tablero interno serán trampas
+        int numTrampas = (tamaño - 2) * (tamaño - 2) * 5 / 100; // Ejemplo: 10% del tablero interno serán trampas
         for (int i = 0; i < numTrampas; i++)
         {
             int x, y;
@@ -241,20 +241,53 @@ public class Tablero
 */
     
     public void Imprimir()
+    {   
+       var canvas = new Canvas(celdas.GetLength(0), celdas.GetLength(1));
+
+// Dibujar casillas del tablero según su tipo
+for (int fila = 0; fila < celdas.GetLength(0); fila++)
+{
+    for (int columna = 0; columna < celdas.GetLength(1); columna++)
     {
-        
-        // Determinar el ancho máximo de los símbolos
-    int maxWidth = 1;
-    for (int i = 0; i < tamaño; i++)
-    {
-        for (int j = 0; j < tamaño; j++)
+        Color color = celdas[fila, columna] switch
         {
-            if (celdas[i, j].Length > maxWidth)
+            " " => Color.Black, // Casilla vacía
+            "■" => Color.Grey, // Obstáculo
+            "+" => Color.Gold1, // Salida
+            "X" => Color.Red, // Trampa
+            "!" => Color.Red, // Trampa
+            "~" => Color.Red, // Trampa
+            "T" => Color.Cyan1, // Casilla de beneficio
+            "H" => Color.Cyan1, // Casilla de beneficio
+            "O" => Color.Cyan1, // Casilla de beneficio
+            "L" => Color.Cyan1, // Casilla de beneficio
+            "B" => Color.Cyan1, // Casilla de beneficio
+            "^" => Color.Magenta1, // Casilla de beneficio
+            "*" => Color.Magenta1, // Casilla de beneficio
+            _ => Color.Grey // Casilla desconocida
+        };
+
+        canvas.SetPixel(columna, fila, color);
+    }
+    
+}
+    AnsiConsole.Write(canvas);
+
+        /*
+        // Determinar el ancho máximo de los símbolos
+        int maxWidth = 1;
+        for (int i = 0; i < tamaño; i++)
+        {
+            for (int j = 0; j < tamaño; j++)
             {
-                maxWidth = celdas[i, j].Length;
+                if (celdas[i, j].Length > maxWidth)
+                {
+                    maxWidth = celdas[i, j].Length;
+                }
             }
         }
-    }
+        
+    
     
         var table = new Table().Border(TableBorder.None)
             .Title("[bold gold1]Tablero del Juego[/]")
@@ -280,7 +313,7 @@ public class Tablero
                 // Aplicar colores según el contenido de la celda
                 if (celda == "■") // Obstáculo
                 {
-                    celdaConColor = $"[white]{celda}[/]";
+                    celdaConColor = $"[white]██[/]";
                 }
                 else if (celda == "+") // Salida
                 {
@@ -299,8 +332,8 @@ public class Tablero
                     celdaConColor = $"[bold orange3]{celda}[/]";
                 }
                 // Centrar el símbolo dentro de la celda
-                int padding = (maxWidth - celda.Length) / 2;
-                celdaConColor = celdaConColor.PadLeft(celdaConColor.Length + padding).PadRight(maxWidth + 2);
+                //int padding = (maxWidth - celda.Length) / 2;
+                //celdaConColor = celdaConColor.PadLeft(celdaConColor.Length + padding).PadRight(maxWidth + 2);
 
                 row.Add(celdaConColor);
             }
@@ -308,10 +341,10 @@ public class Tablero
         }
 
         // Configuración del borde
-        table.Border(TableBorder.Simple); // Desactivar bordes predeterminados
+        table.Border(TableBorder.Rounded); // Desactivar bordes predeterminados
 
         AnsiConsole.Write(table);
-
+*/
         // Mostrar estado de las fichas
         foreach (var ficha in fichas)
         {
