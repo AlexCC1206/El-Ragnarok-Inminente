@@ -3,7 +3,7 @@ using System.Drawing;
 
 public class Baldur : Ficha
 {
-    public Baldur() : base("Baldur, el Dios de la Luz", 100, 3, "B", Color.White)
+    public Baldur() : base("Baldur, el Dios de la Luz", 3, "B")
     {
         Habilidades.Add(new ResilienciaInmortal());
     }

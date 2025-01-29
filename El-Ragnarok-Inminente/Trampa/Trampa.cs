@@ -16,4 +16,13 @@ public abstract class Trampa
     }
 
     public abstract void Activar(Ficha ficha);
+
+    public void VerificarEscudo(Ficha ficha)
+    {
+        if (ficha.InmuneATramapa)
+        {
+            Console.WriteLine($"{ficha.Nombre} está protegido y no sufrirá penalización la próxima vez que caiga en una trampa.");
+            ficha.InmuneATramapa = false; // El escudo dura solo un turno
+        }   
+    }
 }

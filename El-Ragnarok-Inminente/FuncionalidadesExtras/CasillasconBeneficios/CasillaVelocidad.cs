@@ -14,6 +14,6 @@ public class CasillaVelocidad : Casilla
     {
         ficha.Velocidad += IncrementoVelocidad;
         Console.WriteLine($"{ficha.Nombre} ha ganado {IncrementoVelocidad} de velocidad.");
-        System.Threading.Thread.Sleep(2000);
+        System.Threading.Thread.Sleep(3000);
     }
 }

@@ -10,7 +10,7 @@ public class Tablero
     private List<Trampa> trampas;
     private List<Ficha> fichas;
     private (int, int) salida; // Coordenadas de la salida
-    public List<Casilla> casillas { get; set; }
+    public List<Casilla> casillas;
     
 
     public Tablero(int n)
@@ -54,8 +54,8 @@ public class Tablero
     private void GenerarSalida()
     {
         // Establece la salida en la posición (9, 9)
-        int x = 10;
-        int y = 10;
+        int x = 13;
+        int y = 13;
 
         salida = (x, y);
         celdas[x, y] = "+"; // Representa la salida con 'S'
@@ -68,7 +68,7 @@ public class Tablero
 
     private void AñadirObstaculos()
     {
-        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 30 / 100; // Ejemplo: 20% del tablero serán obstáculos
+        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 25 / 100; // Ejemplo: 20% del tablero serán obstáculos
         for (int i = 0; i < numObstaculos; i++)
         {
             int x, y;
@@ -84,7 +84,7 @@ public class Tablero
 
     private void AñadirTrampas()
     {
-        int numTrampas = (tamaño - 2) * (tamaño - 2) * 5 / 100; // Ejemplo: 10% del tablero interno serán trampas
+        int numTrampas = (tamaño - 2) * (tamaño - 2) * 6 / 100; // Ejemplo: 10% del tablero interno serán trampas
         for (int i = 0; i < numTrampas; i++)
         {
             int x, y;
@@ -108,25 +108,29 @@ public class Tablero
         switch (tipoTrampa)
         {
             case 0:
-                return new WindTrap();
+                return new ColumnasdeFuegodeSurtur();
             case 1:
-                return new RootTrap();
-            case 2:
                 return new JotunheimTrap();
+            case 2:
+                return new TormentaHeladadeHelheim();
             default:
-                return new WindTrap();
+                return new ColumnasdeFuegodeSurtur();
         }
     }
 
-    private void AplicarEfectoTrampa(Ficha ficha)
+    public void AplicarEfectoTrampa(Ficha ficha)
     {
         foreach (var trampa in trampas)
         {
             if (ficha.PosicionX == trampa.PosicionX && ficha.PosicionY == trampa.PosicionY)
             {
-                AnsiConsole.MarkupLine($"[red]{ficha.Nombre} ha caído en una trampa![/]");
-                trampa.Activar(ficha);
-                System.Threading.Thread.Sleep(2000);
+                trampa.VerificarEscudo(ficha);
+                if (!ficha.InmuneATramapa)
+                {
+                    trampa.Activar(ficha);
+                }   
+                //AnsiConsole.MarkupLine($"[red]{ficha.Nombre} ha caído en una trampa![/]");
+                //System.Threading.Thread.Sleep(2000);
             }
         }
     }
@@ -157,15 +161,15 @@ public class Tablero
         switch (tipoCasilla)
         {
             case 0:
-                return new CasillaVelocidad(0, 0 , 2); // Aumenta velocidad
+                return new CasillaVelocidad(0, 0 , 1); // Aumenta velocidad
             case 1:
                 return new CasillaHabilidad(0 , 0 , new JusticiaImplacable()); // Habilidad adicional
             default:
-                return new CasillaVelocidad(0, 0, 2); // Por defecto, aumenta velocidad
+                return new CasillaVelocidad(0, 0, 1); // Por defecto, aumenta velocidad
         }
     }
 
-    private void AplicarEfectoCasillas(Ficha ficha)
+    public void AplicarEfectoCasillas(Ficha ficha)
     {
         foreach (var casilla in casillas)
         {
@@ -173,7 +177,7 @@ public class Tablero
             {
                 AnsiConsole.MarkupLine($"[green]{ficha.Nombre} ha caído en una casilla de beneficio![/]");
                 casilla.AplicarEfecto(ficha);
-                System.Threading.Thread.Sleep(2000);
+                //System.Threading.Thread.Sleep(2000);
             }
         }
     }
@@ -192,6 +196,40 @@ public class Tablero
         return accesible;
     }
 
+    private bool HayCamino(int startX, int startY, int endX, int endY)
+    {
+        if (celdas[startX, startY] == "■" || celdas[endX, endY] == "■")
+            return false;
+
+        bool[,] visitado = new bool[tamaño, tamaño];
+        Stack<(int, int)> pila = new Stack<(int, int)>();
+        pila.Push((startX, startY));
+        visitado[startX, startY] = true;
+
+        int[] dx = { -1, 1, 0, 0 };
+        int[] dy = { 0, 0, -1, 1 };
+
+        while (pila.Count > 0)
+        {
+            var (x, y) = pila.Pop();
+            if (x == endX && y == endY)
+                return true;
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nuevoX = x + dx[i];
+                int nuevoY = y + dy[i];
+
+                if (nuevoX >= 0 && nuevoX < tamaño && nuevoY >= 0 && nuevoY < tamaño && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != "■")
+                {
+                    pila.Push((nuevoX, nuevoY));
+                    visitado[nuevoX, nuevoY] = true;
+                }
+            }
+        }
+        return false;
+    }
+/*
     public bool HayCamino(int startX, int startY, int endX, int endY)
     {
         if (celdas[startX, startY] == "■" || celdas[endX, endY] == "■")
@@ -226,6 +264,7 @@ public class Tablero
         
         return false;
     }
+    */
 /*
     public void Imprimir()
     {
@@ -242,36 +281,40 @@ public class Tablero
     
     public void Imprimir()
     {   
-       var canvas = new Canvas(celdas.GetLength(0), celdas.GetLength(1));
+        var canvas = new Canvas(celdas.GetLength(0), celdas.GetLength(1));
+        
+        //Console.Clear();
 
-// Dibujar casillas del tablero según su tipo
-for (int fila = 0; fila < celdas.GetLength(0); fila++)
-{
-    for (int columna = 0; columna < celdas.GetLength(1); columna++)
-    {
-        Color color = celdas[fila, columna] switch
+        // Dibujar casillas del tablero según su tipo
+        for (int fila = 0; fila < celdas.GetLength(0); fila++)
         {
-            " " => Color.Black, // Casilla vacía
-            "■" => Color.Grey, // Obstáculo
-            "+" => Color.Gold1, // Salida
-            "X" => Color.Red, // Trampa
-            "!" => Color.Red, // Trampa
-            "~" => Color.Red, // Trampa
-            "T" => Color.Cyan1, // Casilla de beneficio
-            "H" => Color.Cyan1, // Casilla de beneficio
-            "O" => Color.Cyan1, // Casilla de beneficio
-            "L" => Color.Cyan1, // Casilla de beneficio
-            "B" => Color.Cyan1, // Casilla de beneficio
-            "^" => Color.Magenta1, // Casilla de beneficio
-            "*" => Color.Magenta1, // Casilla de beneficio
-            _ => Color.Grey // Casilla desconocida
-        };
+            for (int columna = 0; columna < celdas.GetLength(1); columna++)
+            {
+                Color color = celdas[fila, columna] switch
+                {
+                    " " => Color.Black, // Casilla vacía
+                    "■" => Color.Grey, // Obstáculo
+                    "+" => Color.Green, // Salida
+                    "X" => Color.MediumPurple2, // Trampa
+                    "!" => Color.MediumPurple2, // Trampa
+                    "~" => Color.MediumPurple2, // Trampa
+                    "T" => Color.Red, // Casilla de beneficio
+                    "H" => Color.Silver, // Casilla de beneficio
+                    "O" => Color.Gold1, // Casilla de beneficio
+                    "L" => Color.Lime, // Casilla de beneficio
+                    "B" => Color.White, // Casilla de beneficio
+                    "^" => Color.DeepSkyBlue1, // Casilla de beneficio
+                    "*" => Color.DeepSkyBlue1, // Casilla de beneficio
+                    _ => Color.Grey // Casilla desconocida
+                };
+                
 
-        canvas.SetPixel(columna, fila, color);
-    }
-    
-}
-    AnsiConsole.Write(canvas);
+            canvas.SetPixel(columna, fila, color);
+            }
+        }
+        AnsiConsole.Write(canvas);
+
+        
 
         /*
         // Determinar el ancho máximo de los símbolos
@@ -348,7 +391,7 @@ for (int fila = 0; fila < celdas.GetLength(0); fila++)
         // Mostrar estado de las fichas
         foreach (var ficha in fichas)
         {
-            AnsiConsole.MarkupLine($"{ficha.Nombre} está en ({ficha.PosicionX}, {ficha.PosicionY})");
+            AnsiConsole.MarkupLine($"[italic green]{ficha.Nombre} está en ({ficha.PosicionX}, {ficha.PosicionY})[/]");
         }
     }
     
@@ -378,6 +421,7 @@ for (int fila = 0; fila < celdas.GetLength(0); fila++)
             ficha.PosicionY = nuevaY;
             celdas[nuevaX, nuevaY] = ficha.Simbolo; // Coloca la ficha en la nueva posición
             AplicarEfectoTrampa(ficha);
+            AplicarEfectoCasillas(ficha);
         }
         else
         {
@@ -408,5 +452,7 @@ for (int fila = 0; fila < celdas.GetLength(0); fila++)
 
         return true;
     }
+
+    
     
 }

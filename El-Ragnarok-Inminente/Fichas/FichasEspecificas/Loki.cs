@@ -1,11 +1,13 @@
 using System;
 using System.Drawing;
 
+
 public class Loki : Ficha
 {
-    public Loki() : base("Loki, el Embaucador", 120, 3, "L", Color.LimeGreen)
+    public Loki() : base("Loki, el Embaucador", 3, "L")
     {
-        Habilidades.Add(new IlusionSombria());
+        //Habilidades.Add(new IlusionSombria());
+        Habilidades.Add(new PasoDeLasSombras(new Tablero(27)));
     }
 
     public override void UsarHabilidad(int indice)

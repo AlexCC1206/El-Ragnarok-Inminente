@@ -14,6 +14,6 @@ public class CasillaHabilidad : Casilla
     {
         ficha.Habilidades.Add(HabilidadAdicional);
         Console.WriteLine($"{ficha.Nombre} ha obtenido la habilidad {HabilidadAdicional.Nombre}");
-        System.Threading.Thread.Sleep(2000);
+        System.Threading.Thread.Sleep(3000);
     }
 }

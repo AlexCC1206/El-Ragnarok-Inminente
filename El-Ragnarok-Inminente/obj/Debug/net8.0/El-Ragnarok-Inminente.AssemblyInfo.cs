@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("El-Ragnarok-Inminente")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0831f2a0481c92d4f5b2a804ad58e3806bf4b421")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5956cbc2c34f4bd4ee9c9d6f066439ea3b4b694d")]
 [assembly: System.Reflection.AssemblyProductAttribute("El-Ragnarok-Inminente")]
 [assembly: System.Reflection.AssemblyTitleAttribute("El-Ragnarok-Inminente")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

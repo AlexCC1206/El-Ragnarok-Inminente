@@ -11,12 +11,16 @@ public class RayoDeOdin : Habilidad
         if (EstaDisponible())
         {
             TurnosRestantes = Enfriamiento;
-            ficha.Velocidad += 3; // Aumenta la velocidad en 3 puntos
-            Console.WriteLine($"{ficha.Nombre} usa {Nombre} y aumenta su velocidad en 3 puntos durante 2 turnos.");
+            ficha.Velocidad = ficha.VelocidadBase; // Restaurar velocidad base
+            ficha.Paralizado = false;          // Quitar parálisis si existe
+            //ficha.InmuneATramapa = false;      // Quitar inmunidad a trampas si existe
+            //ficha.Invisible = false;           // Quitar invisibilidad si existe
+            //ficha.Inmovilizado = false;        // Quitar inmovilización si existe
+            Console.WriteLine($"[yellow]{ficha.Nombre} fue curado y todas las penalizaciones fueron eliminadas.[/]");
         }
         else
         {
-            Console.WriteLine($"{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}");
+            Console.WriteLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
         }
     }
 }

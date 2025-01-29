@@ -24,11 +24,11 @@ public static class InterfazJuego
             AnsiConsole.Clear();
         
             var title = new FigletText("El Ragnarok Inminente")
-                .Color(Color.DarkGoldenrod) 
+                .Color(Color.CadetBlue) 
                 .Centered();
         
             var shadowedTitle = new Panel(title)
-                .BorderColor(Color.Violet) 
+                .BorderColor(Color.Gold1) 
                 .Padding(2, 2, 2, 2)
                 .RoundedBorder()
                 .Border(BoxBorder.Double);
@@ -39,8 +39,9 @@ public static class InterfazJuego
             
             var opciones = new[] { "Nueva Partida", "Instrucciones", "Salir" };
             var prompt = new SelectionPrompt<string>()
-                .Title("[bold cyan3]Menú Principal[/]")
-                .AddChoices(opciones);
+                .Title("[bold navy]Menú Principal[/]")
+                .AddChoices(opciones)
+                .HighlightStyle(new Style(Color.Gold1));
 
             var opcionSeleccionada = AnsiConsole.Prompt(prompt);
 
@@ -53,7 +54,14 @@ public static class InterfazJuego
                     MostrarInstrucciones();
                     break;
                 case "Salir":
-                    AnsiConsole.MarkupLine("[bold darkred_1]¡Gracias por jugar![/]");
+                    //AnsiConsole.MarkupLine("[bold darkred_1]¡Gracias por jugar![/]");
+                     Console.Clear();
+                
+                    var textoSalida = new FigletText($"¡Gracias por jugar!")
+                    .Color(Color.Red)
+                    .Centered();
+
+                    AnsiConsole.Write(textoSalida);
                     Environment.Exit(0);
                     break;
             }
@@ -133,7 +141,7 @@ AnsiConsole.Write(layout);
     {      
         //try
         //{
-            Tablero tablero = new Tablero(21);
+            Tablero tablero = new Tablero(27);
             Jugador jugador1 = new Jugador("Jugador 1");
             Jugador jugador2 = new Jugador("Jugador 2");
 
@@ -168,7 +176,8 @@ AnsiConsole.Write(layout);
 
     public static void MostrarInstrucciones()
     {
-        var reglas = new Rule("[cyan3]Instrucciones del Juego[/]");
+        
+        var reglas = new Rule("[italic cyan3]Instrucciones del Juego[/]");
         AnsiConsole.Write(reglas);
 
         var panel = new Panel(@"
@@ -177,15 +186,31 @@ AnsiConsole.Write(layout);
         3. ¡Diviértete!
         4. [bold yellow]Presiona cualquier tecla para volver al menú principal...[/]
         ")
-        .BorderColor(Color.DeepSkyBlue1)
-        .Header("[cyan3]Reglas[/]");
+        .BorderColor(Color.Silver)
+        .Header("[italic silver]Reglas[/]");
 
         AnsiConsole.Write(panel);
-
         Console.ReadKey(true);
         MostrarMenuPrincipal();
-    }
 
+/*
+        var panel = new Panel(@"
+        1. Usa WASD para mover la ficha (Jugador 1) o las flechas (Jugador 2).
+        2. Evita las trampas y obstáculos para llegar a la salida.
+        3. ¡Diviértete!
+        4. [bold yellow]Presiona cualquier tecla para volver al menú principal...[/]
+        ")
+        .BorderColor(Color.Silver)
+        .Padding(3, 3, 3, 3)
+        .RoundedBorder()
+        .Border(BoxBorder.Double);
+
+        AnsiConsole.Write(panel);
+        Console.ReadKey(true);
+        MostrarMenuPrincipal();
+        */
+    }
+/*
     public static void MostrarLeyenda()
     {
         var leyenda = new Panel(new Table()
@@ -200,6 +225,7 @@ AnsiConsole.Write(layout);
 
         AnsiConsole.Write(leyenda);
     }
+*/
 /*
     public static Panel MostrarInformacionJugador(Jugador jugador)
     {
@@ -222,7 +248,8 @@ AnsiConsole.Write(layout);
         var opciones = new[] { "Moverse", "Usar habilidad", "Pasar turno" };
         var prompt = new SelectionPrompt<string>()
             .Title("Opciones:")
-            .AddChoices(opciones);
+            .AddChoices(opciones)
+            .HighlightStyle(new Style(Color.Gold1));
         var opcionSeleccionada = AnsiConsole.Prompt(prompt);
         AnsiConsole.MarkupLine($"Has seleccionado: [white]{opcionSeleccionada}[/]");
         

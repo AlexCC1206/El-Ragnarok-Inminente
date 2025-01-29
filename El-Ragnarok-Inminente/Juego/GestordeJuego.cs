@@ -30,22 +30,11 @@ public class Juego
         {
             Jugador jugadorActual = turno.ObtenerJugadorActual();
             Ficha fichaSeleccionada = jugadorActual == turno.jugadores[0] ? fichaJugador1 : fichaJugador2;
-
-            try
-            {
-                Console.Clear(); // Limpia la consola
-            }
-            catch (IOException)
-            {
-                // Maneja la excepción si Console.Clear() no es compatible
-                AnsiConsole.MarkupLine("[red]No se puede limpiar la consola en este entorno.[/]");
-            }
-
-            // Mostrar el tablero
-            tablero.Imprimir();
+            
+            ActualizarTablero();
 
             // Mostrar la leyenda
-            InterfazJuego.MostrarLeyenda();
+            //InterfazJuego.MostrarLeyenda();
 
             // Mostrar información del jugador
             //InterfazJuego.MostrarInformacionJugador(jugadorActual);
@@ -66,11 +55,20 @@ public class Juego
                     AnsiConsole.MarkupLine($"[yellow]{jugadorActual.Nombre} ha decidido pasar su turno.[/]");
                     break;
             }
+            
+            //tablero.Imprimir();
+            //Console.Clear();
 
             // Verificar si la ficha ha llegado a la salida
             if (tablero.EsSalida(fichaSeleccionada.PosicionX, fichaSeleccionada.PosicionY))
             {
-                AnsiConsole.MarkupLine($"[bold green]{jugadorActual.Nombre} ha ganado al llegar a la salida con {fichaSeleccionada.Nombre}![/]");
+                Console.Clear();
+                
+                var textoVictoria = new FigletText($"¡{jugadorActual.Nombre} ha ganado!")
+                    .Color(Color.Green)
+                    .Centered();
+
+                AnsiConsole.Write(textoVictoria);
                 Environment.Exit(0); // Termina el juego
             }
 
@@ -89,27 +87,9 @@ public class Juego
             int nuevaX = ficha.PosicionX;
             int nuevaY = ficha.PosicionY;
 
-            if (jugador.Nombre == "Jugador 1")
+            if (jugador.Nombre == "Jugador 1" || jugador.Nombre == "Jugador 2")
             {
-                switch (key)
-                {
-                    case ConsoleKey.W:
-                        nuevaX--;
-                        break;
-                    case ConsoleKey.A:
-                        nuevaY--;
-                        break;
-                    case ConsoleKey.S:
-                        nuevaX++;
-                        break;
-                    case ConsoleKey.D:
-                        nuevaY++;
-                        break;
-                }
-            }
-            else if (jugador.Nombre == "Jugador 2")
-            {
-                switch (key)
+                    switch (key)
                 {
                     case ConsoleKey.UpArrow:
                         nuevaX--;
@@ -124,34 +104,32 @@ public class Juego
                         nuevaY++;
                         break;
                 }
-            }
+            } 
 
             if (nuevaX != ficha.PosicionX || nuevaY != ficha.PosicionY)
             {
                 try
-                {
-                    tablero.MoverFicha(ficha, nuevaX, nuevaY);
-                    movimientosRestantes--;
-
-                    // Limpiar la consola antes de imprimir el tablero
-                    try
                     {
-                        Console.Clear();
+                        tablero.MoverFicha(ficha, nuevaX, nuevaY);
+                        movimientosRestantes--;
+                        tablero.AplicarEfectoTrampa(ficha);
+                        tablero.AplicarEfectoCasillas(ficha);
+                        ActualizarTablero();
                     }
-                    catch (IOException)
+                    catch (InvalidOperationException ex)
                     {
-                        AnsiConsole.MarkupLine("[red]No se puede limpiar la consola en este entorno.[/]");
+                        Console.WriteLine(ex.Message);
                     }
+                
 
-                    // Imprimir el tablero actualizado
-                    tablero.Imprimir();
+                    
+                //Console.Clear();
 
-                    //AnsiConsole.MarkupLine($"[green]{jugador.Nombre} ha movido su ficha a ({nuevaX}, {nuevaY}).[/]");
-                }
-                catch (InvalidOperationException ex)
-                {
-                    AnsiConsole.MarkupLine($"[red]{ex.Message}[/]");
-                }
+                // Imprimir el tablero actualizado
+                
+
+                //AnsiConsole.MarkupLine($"[green]{jugador.Nombre} ha movido su ficha a ({nuevaX}, {nuevaY}).[/]");
+                
             }
         }
     }
@@ -176,7 +154,8 @@ public class Juego
                 // Usar la habilidad seleccionada
                 habilidad.Usar(ficha);
                 AnsiConsole.MarkupLine($"[green]{jugador.Nombre} ha usado la habilidad {habilidad.Nombre} con {ficha.Nombre}.[/]");
-                //System.Threading.Thread.Sleep(2000);
+                System.Threading.Thread.Sleep(2000);
+                ActualizarTablero();
             }
             else
             {
@@ -187,9 +166,14 @@ public class Juego
         {
             AnsiConsole.MarkupLine($"[red]{ficha.Nombre} no tiene habilidades disponibles.[/]");
         }
-        
-        InterfazJuego.MostrarOpciones();
     }
+
+    private void ActualizarTablero()
+    {
+        Console.Clear(); // Limpia la consola
+        tablero.Imprimir(); // Imprime el tablero actualizado
+    }
+
 }
 
             /*
