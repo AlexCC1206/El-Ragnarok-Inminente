@@ -9,9 +9,8 @@ public class Tablero
     private Random random;
     private List<Trampa> trampas;
     private List<Ficha> fichas;
-    private (int, int) salida; // Coordenadas de la salida
+    private (int, int) salida;     
     public List<Casilla> casillas;
-    
 
     public Tablero(int n)
     {
@@ -21,14 +20,13 @@ public class Tablero
         trampas = new List<Trampa>();
         fichas = new List<Ficha>();
         casillas = new List<Casilla>();
-
+        
         Inicializar();
         GenerarSalida();
     }
 
     private void Inicializar()
     {
-        // Inicializa todas las celdas con un punto
         for (int i = 0; i < tamaño; i++)
         {
             for (int j = 0; j < tamaño; j++)
@@ -53,12 +51,12 @@ public class Tablero
 
     private void GenerarSalida()
     {
-        // Establece la salida en la posición (9, 9)
+        // Establece la salida en la posición (13, 13)
         int x = 13;
         int y = 13;
 
         salida = (x, y);
-        celdas[x, y] = "+"; // Representa la salida con 'S'
+        celdas[x, y] = "+"; // Representación de la salida
     }
 
     public bool EsSalida(int x, int y)
@@ -68,7 +66,7 @@ public class Tablero
 
     private void AñadirObstaculos()
     {
-        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 25 / 100; // Ejemplo: 20% del tablero serán obstáculos
+        int numObstaculos = (tamaño - 2) * (tamaño - 2) * 30 / 100; // Cantidad de obstáculos en porcentaje
         for (int i = 0; i < numObstaculos; i++)
         {
             int x, y;
@@ -76,15 +74,15 @@ public class Tablero
             {
                 x = random.Next(1, tamaño - 1); // Evita los bordes
                 y = random.Next(1, tamaño - 1); // Evita los bordes
-            } while (celdas[x, y] != " " || !EsAccesible(x, y)); // Asegura que no se sobreescriba un obstáculo existente y que el tablero siga siendo accesible
+            } while (celdas[x, y] != " " || !EsAccesible(x, y)); 
 
-            celdas[x, y] = "■"; // Representa un obstáculo con '#'
+            celdas[x, y] = "■"; 
         }
     }
 
     private void AñadirTrampas()
     {
-        int numTrampas = (tamaño - 2) * (tamaño - 2) * 6 / 100; // Ejemplo: 10% del tablero interno serán trampas
+        int numTrampas = (tamaño - 2) * (tamaño - 2) *  3 / 100; // Cantidad de trampas en porcentaje
         for (int i = 0; i < numTrampas; i++)
         {
             int x, y;
@@ -92,12 +90,12 @@ public class Tablero
             {
                 x = random.Next(1, tamaño - 1); // Evita los bordes
                 y = random.Next(1, tamaño - 1); // Evita los bordes
-            } while (celdas[x, y] != " " || !EsAccesible(x, y)); // Asegura que no se sobreescriba una trampa existente y que el tablero siga siendo accesible
+            } while (celdas[x, y] != " " || !EsAccesible(x, y));
 
             Trampa trampa = GenerarTrampaAleatoria();
             trampa.PosicionX = x;
             trampa.PosicionY = y;
-            celdas[x, y] = trampa.Simbolo; // Representa una trampa con su símbolo
+            celdas[x, y] = trampa.Simbolo; 
             trampas.Add(trampa);
         }
     }
@@ -110,7 +108,7 @@ public class Tablero
             case 0:
                 return new ColumnasdeFuegodeSurtur();
             case 1:
-                return new JotunheimTrap();
+                return new WindTrap();
             case 2:
                 return new TormentaHeladadeHelheim();
             default:
@@ -128,16 +126,14 @@ public class Tablero
                 if (!ficha.InmuneATramapa)
                 {
                     trampa.Activar(ficha);
-                }   
-                //AnsiConsole.MarkupLine($"[red]{ficha.Nombre} ha caído en una trampa![/]");
-                //System.Threading.Thread.Sleep(2000);
+                } 
             }
         }
     }
 
     private void AñadirCasillasBeneficios()
     {
-        int numCasillasBeneficios = (tamaño - 2) * (tamaño - 2) * 5 / 100; // Ejemplo: 10% del tablero interno serán casillas con beneficios
+        int numCasillasBeneficios = (tamaño - 2) * (tamaño - 2) * 2 / 100; // Ejemplo: 10% del tablero interno serán casillas con beneficios
         for (int i = 0; i < numCasillasBeneficios; i++)
         {
             int x, y;
@@ -150,22 +146,22 @@ public class Tablero
             Casilla casilla = GenerarCasillaAleatoria();
             casilla.PosicionX = x;
             casilla.PosicionY = y;
-            celdas[x, y] = casilla.Simbolo; // Representa una casilla con su símbolo
+            celdas[x, y] = casilla.Simbolo; 
             casillas.Add(casilla);
         }
     }
 
     private Casilla GenerarCasillaAleatoria()
     {
-        int tipoCasilla = random.Next(2); // Puedes ajustar el número según la cantidad de tipos de casillas
+        int tipoCasilla = random.Next(2); 
         switch (tipoCasilla)
         {
             case 0:
-                return new CasillaVelocidad(0, 0 , 1); // Aumenta velocidad
+                return new CasillaVelocidad(0, 0 , 1); 
             case 1:
-                return new CasillaHabilidad(0 , 0 , new JusticiaImplacable()); // Habilidad adicional
+                return new CasillaHabilidad(0 , 0 , new JusticiaImplacable()); 
             default:
-                return new CasillaVelocidad(0, 0, 1); // Por defecto, aumenta velocidad
+                return new CasillaVelocidad(0, 0, 1); 
         }
     }
 
@@ -175,22 +171,17 @@ public class Tablero
         {
             if (ficha.PosicionX == casilla.PosicionX && ficha.PosicionY == casilla.PosicionY)
             {
-                AnsiConsole.MarkupLine($"[green]{ficha.Nombre} ha caído en una casilla de beneficio![/]");
                 casilla.AplicarEfecto(ficha);
-                //System.Threading.Thread.Sleep(2000);
             }
         }
     }
 
     private bool EsAccesible(int obstaculoX, int obstaculoY)
     {
-        // Temporarily place the obstacle
         celdas[obstaculoX, obstaculoY] = "■";
 
-        // Check if there's a path from (1, 1) to (tamaño-2, tamaño-2)
         bool accesible = HayCamino(1, 1, tamaño - 2, tamaño - 2);
 
-        // Remove the temporary obstacle
         celdas[obstaculoX, obstaculoY] = " ";
 
         return accesible;
@@ -229,62 +220,11 @@ public class Tablero
         }
         return false;
     }
-/*
-    public bool HayCamino(int startX, int startY, int endX, int endY)
-    {
-        if (celdas[startX, startY] == "■" || celdas[endX, endY] == "■")
-            return false;
-
-        bool[,] visitado = new bool[tamaño, tamaño];
-        Queue<(int, int)> cola = new Queue<(int, int)>();
-        cola.Enqueue((startX, startY));
-        visitado[startX, startY] = true;
-
-        int[] dx = { -1, 1, 0, 0 };
-        int[] dy = { 0, 0, -1, 1 };
-
-        while (cola.Count > 0)
-        {
-            var (x, y) = cola.Dequeue();
-            if (x == endX && y == endY)
-                return true;
-
-            for (int i = 0; i < 4; i++)
-            {
-                int nuevoX = x + dx[i];
-                int nuevoY = y + dy[i];
-
-                if (nuevoX >= 0 && nuevoX < tamaño && nuevoY >= 0 && nuevoY < tamaño && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != "■")
-                {
-                    cola.Enqueue((nuevoX, nuevoY));
-                    visitado[nuevoX, nuevoY] = true;
-                }
-            }
-        }
-        
-        return false;
-    }
-    */
-/*
-    public void Imprimir()
-    {
-        for (int i = 0; i < tamaño; i++)
-        {
-            for (int j = 0; j < tamaño; j++)
-            {
-                Console.Write(celdas[i, j] + " ");
-            }
-            Console.WriteLine();
-        }
-    }
-*/
     
     public void Imprimir()
     {   
         var canvas = new Canvas(celdas.GetLength(0), celdas.GetLength(1));
         
-        //Console.Clear();
-
         // Dibujar casillas del tablero según su tipo
         for (int fila = 0; fila < celdas.GetLength(0); fila++)
         {
@@ -295,115 +235,37 @@ public class Tablero
                     " " => Color.Black, // Casilla vacía
                     "■" => Color.Grey, // Obstáculo
                     "+" => Color.Green, // Salida
-                    "X" => Color.MediumPurple2, // Trampa
-                    "!" => Color.MediumPurple2, // Trampa
-                    "~" => Color.MediumPurple2, // Trampa
-                    "T" => Color.Red, // Casilla de beneficio
-                    "H" => Color.Silver, // Casilla de beneficio
-                    "O" => Color.Gold1, // Casilla de beneficio
-                    "L" => Color.Lime, // Casilla de beneficio
-                    "B" => Color.White, // Casilla de beneficio
-                    "^" => Color.DeepSkyBlue1, // Casilla de beneficio
-                    "*" => Color.DeepSkyBlue1, // Casilla de beneficio
+                    "X" => Color.DarkOrange, // Trampa1
+                    "!" => Color.DarkOrange, // Trampa2
+                    "~" => Color.DarkOrange, // Trampa3
+                    "T" => Color.Red, // Ficha Tyr
+                    "H" => Color.Silver, // Ficha Heimdall
+                    "O" => Color.Gold1, // Ficha Odin
+                    "L" => Color.Magenta1, // Ficha Loki
+                    "B" => Color.White, // Ficha Bladur
+                    "^" => Color.DeepSkyBlue1, // Casilla de beneficio1
+                    "*" => Color.DeepSkyBlue1, // Casilla de beneficio2
                     _ => Color.Grey // Casilla desconocida
                 };
-                
-
+            
             canvas.SetPixel(columna, fila, color);
             }
         }
         AnsiConsole.Write(canvas);
 
-        
-
-        /*
-        // Determinar el ancho máximo de los símbolos
-        int maxWidth = 1;
-        for (int i = 0; i < tamaño; i++)
-        {
-            for (int j = 0; j < tamaño; j++)
-            {
-                if (celdas[i, j].Length > maxWidth)
-                {
-                    maxWidth = celdas[i, j].Length;
-                }
-            }
-        }
-        
-    
-    
-        var table = new Table().Border(TableBorder.None)
-            .Title("[bold gold1]Tablero del Juego[/]")
-            .HideHeaders();
-        
-
-        // Definir las columnas de la tabla
-        for (int i = 0; i < tamaño; i++)
-        {
-            table.AddColumn(new TableColumn(" "));//.Width(maxWidth + 2)); // +2 para espacios adicionales
-        }
-
-        // Agregar filas a la tabla
-        for (int i = 0; i < tamaño; i++)
-        {
-            var row = new List<string>();
-            for (int j = 0; j < tamaño; j++)
-            {
-                string celda = celdas[i, j];
-                string celdaConColor = celda;
-
-    
-                // Aplicar colores según el contenido de la celda
-                if (celda == "■") // Obstáculo
-                {
-                    celdaConColor = $"[white]██[/]";
-                }
-                else if (celda == "+") // Salida
-                {
-                    celdaConColor = $"[bold gold1 on navy]{celda}[/]";
-                }
-                else if (celda == "X" || celda == "!" || celda == "~") 
-                {
-                    celdaConColor = $"[blink bold mediumpurple2]{celda}[/]";
-                }
-                else if(celda == "T" || celda == "H" || celda == "O" || celda == "L" || celda == "B")
-                {
-                    celdaConColor = $"[deepskyblue1]{celda}[/]";
-                }
-                else if (celda == "^" || celda == "*")
-                {
-                    celdaConColor = $"[bold orange3]{celda}[/]";
-                }
-                // Centrar el símbolo dentro de la celda
-                //int padding = (maxWidth - celda.Length) / 2;
-                //celdaConColor = celdaConColor.PadLeft(celdaConColor.Length + padding).PadRight(maxWidth + 2);
-
-                row.Add(celdaConColor);
-            }
-            table.AddRow(row.ToArray());
-        }
-
-        // Configuración del borde
-        table.Border(TableBorder.Rounded); // Desactivar bordes predeterminados
-
-        AnsiConsole.Write(table);
-*/
         // Mostrar estado de las fichas
         foreach (var ficha in fichas)
         {
-            AnsiConsole.MarkupLine($"[italic green]{ficha.Nombre} está en ({ficha.PosicionX}, {ficha.PosicionY})[/]");
+            AnsiConsole.MarkupLine($"[bold yellow]{ficha.Nombre} está en ({ficha.PosicionX}, {ficha.PosicionY})[/]");
         }
     }
     
-
-    
     public void AñadirFicha(Ficha ficha, int x, int y)
     {
-        // Forzar la colocación de la ficha en la posición especificada
         fichas.Add(ficha);
         ficha.PosicionX = x;
         ficha.PosicionY = y;
-        celdas[x, y] = ficha.Simbolo; // Representa una ficha con 'F'
+        celdas[x, y] = ficha.Simbolo; 
     }
 
     public void MoverFicha(Ficha ficha, int nuevaX, int nuevaY)
@@ -443,7 +305,7 @@ public class Tablero
             return false;
         }
 
-        // Verifica que la ficha no se mueva más allá de su velocidad permitida
+        // Movimiento de la ficha según su velocidad
         int distancia = Math.Abs(nuevaX - ficha.PosicionX) + Math.Abs(nuevaY - ficha.PosicionY);
         if (distancia > ficha.Velocidad)
         {
@@ -452,7 +314,4 @@ public class Tablero
 
         return true;
     }
-
-    
-    
 }

@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class JusticiaImplacable : Habilidad
 {
@@ -15,11 +16,13 @@ public class JusticiaImplacable : Habilidad
             ficha.VelocidadBase = ficha.Velocidad;
             ficha.Velocidad += 2;
             turnosActivos = 2;
-            Console.WriteLine($"[yellow]{ficha.Nombre} usa {Nombre} y aumenta su velocidad en 2 casillas por turno durante los próximos {turnosActivos} turnos.[/]");
+            AnsiConsole.MarkupLine($"[yellow]{ficha.Nombre} usa {Nombre} y aumenta su velocidad en 2 casillas por turno durante los próximos {turnosActivos} turnos.[/]");
+            Thread.Sleep(1000);
         }
         else
         {
-            Console.WriteLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
+            AnsiConsole.MarkupLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
+            Thread.Sleep(1000);
         }
         ficha.ReducirEnfriamientoHabilidades();
         ReducirTurnosActivos(ficha);
@@ -33,7 +36,8 @@ public class JusticiaImplacable : Habilidad
             if (turnosActivos == 0)
             {
                 ficha.Velocidad = ficha.VelocidadBase; // Restaura la velocidad base
-                Console.WriteLine($"{ficha.Nombre} ya no tiene la habilidad {Nombre} activa.");
+                AnsiConsole.WriteLine($"{ficha.Nombre} ya no tiene la habilidad {Nombre} activa.");
+                Thread.Sleep(1000);
             }
         }
     }

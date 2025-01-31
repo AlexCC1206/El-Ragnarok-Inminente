@@ -5,7 +5,7 @@ public class Casilla
 {
     public int PosicionX { get; set; }
     public int PosicionY { get; set; }
-    public string Simbolo { get; set; } // Tipo de casilla (velocidad, habilidad, etc.)
+    public string Simbolo { get; set; } 
     //public int DuracionEfecto { get; set; } // Duración del efecto en turnos
 
     public Casilla(int posicionX, int posicionY, string simbolo)
@@ -18,6 +18,7 @@ public class Casilla
 
     public virtual void AplicarEfecto(Ficha ficha)
     {
-        // Método base para aplicar el efecto de la casilla
+        
     }
+    
 }

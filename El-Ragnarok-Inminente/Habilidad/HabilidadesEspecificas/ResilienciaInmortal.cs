@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class ResilienciaInmortal : Habilidad
 {
@@ -12,11 +13,13 @@ public class ResilienciaInmortal : Habilidad
         {
             TurnosRestantes = Enfriamiento;
             ficha.InmuneATramapa = true; // Marca a la ficha como inmune a la próxima trampa
-            Console.WriteLine($"[yellow]{ficha.Nombre} usa {Nombre} y no sufrirá penalización la próxima vez que caiga en una trampa.[/]");
+            AnsiConsole.MarkupLine($"[yellow]{ficha.Nombre} usa {Nombre} y no sufrirá penalización la próxima vez que caiga en una trampa.[/]");
+            Thread.Sleep(1000);
         }
         else
         {
-            Console.WriteLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
+            AnsiConsole.MarkupLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
+            Thread.Sleep(1000);
         }
     }
 }

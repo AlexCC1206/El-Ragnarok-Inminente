@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class CasillaVelocidad : Casilla
 {
@@ -13,7 +14,7 @@ public class CasillaVelocidad : Casilla
     public override void AplicarEfecto(Ficha ficha)
     {
         ficha.Velocidad += IncrementoVelocidad;
-        Console.WriteLine($"{ficha.Nombre} ha ganado {IncrementoVelocidad} de velocidad.");
-        System.Threading.Thread.Sleep(3000);
+        AnsiConsole.MarkupLine($"[green]{ficha.Nombre} ha ganado {IncrementoVelocidad} de velocidad.[/]");
+        Thread.Sleep(1000);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class ColumnasdeFuegodeSurtur : Trampa
 {
@@ -15,15 +16,14 @@ public class ColumnasdeFuegodeSurtur : Trampa
         {
             ficha.Atrapado = true;
             ficha.turnosAtrapado = 1;
-            Console.WriteLine($"¡La {ficha.Nombre} ha caído en Columnas de Fuego! Pierdes {ficha.turnosAtrapado} turno.");
+            AnsiConsole.MarkupLine($"[bold red]¡La {ficha.Nombre} ha caído en Columnas de Fuego! Pierdes {ficha.turnosAtrapado} turno.[/]");
             
         }
         else
         {
-            Console.WriteLine($"{ficha.Nombre} evita las Columnas de Fuego y no pierde un turno.");
+            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} evita las Columnas de Fuego y no pierde un turno.[/]");
+            
         }
-        System.Threading.Thread.Sleep(2000);
-    }
-
-    
+        Thread.Sleep(1000);    
+    } 
 }

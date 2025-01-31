@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class TormentaHeladadeHelheim : Trampa
 {
@@ -16,14 +17,15 @@ public class TormentaHeladadeHelheim : Trampa
         {
             ficha.Congelado = true;
             turnosCongelado = 2;
-            Console.WriteLine($"¡{ficha.Nombre} ha caído en una Tormenta Helada! Congelada por {turnosCongelado} turnos.");
+            AnsiConsole.MarkupLine($"[bold red]¡{ficha.Nombre} ha caído en una Tormenta Helada! Congelada por {turnosCongelado} turnos.[/]");
             
         }
         else
         {
-            Console.WriteLine($"{ficha.Nombre} evita las Columnas de Fuego y no pierde un turno.");
+            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} evita las Columnas de Fuego y no pierde un turno.[/]");
+            
         }
-        System.Threading.Thread.Sleep(3000);  
+        Thread.Sleep(1000);
     }
 
     public void Descongelar(Ficha ficha)
@@ -31,12 +33,15 @@ public class TormentaHeladadeHelheim : Trampa
         if (turnosCongelado > 0)
         {
             turnosCongelado--;
-            Console.WriteLine($"Quedan {turnosCongelado} turnos para que {ficha.Nombre} se descongele.");
+            AnsiConsole.MarkupLine($"[bold white]Quedan {turnosCongelado} turnos para que {ficha.Nombre} se descongele.[/]");
+            
         }
         else
         {
             ficha.Congelado = false;
-            Console.WriteLine($"{ficha.Nombre} se ha descongelado.");
+            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} se ha descongelado.[/]");
+           
         }
+        Thread.Sleep(1000);
     }
 }

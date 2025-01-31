@@ -1,14 +1,7 @@
-using System;
-
 public class PasoDeLasSombras : Habilidad
 {
-    private Random random = new Random();
-    public Tablero tablero;
-    public int x, y;
-
-    public PasoDeLasSombras(Tablero tablero) : base("Paso de las Sombras", 2)
+    public PasoDeLasSombras() : base("Paso de las Sombras", 3)
     {
-        this.tablero = tablero;
     }
 
     public override void Usar(Ficha ficha)
@@ -16,50 +9,33 @@ public class PasoDeLasSombras : Habilidad
         if (EstaDisponible())
         {
             TurnosRestantes = Enfriamiento;
-            // Buscar una casilla vacía aleatoria
-            int maxIntentos = 100; // Límite de iteraciones
-            int intentos = 0;
-            bool encontrado = false;
 
-            while (intentos < maxIntentos && !encontrado)
+            // Desvanecerse en las sombras
+            ficha.Tablero.celdas[ficha.PosicionX, ficha.PosicionY] = " ";
+        
+            // Reaparecer en una posición aleatoria
+            Random random = new Random();
+            int nuevaX = random.Next(1, ficha.Tablero.tamaño - 1);
+            int nuevaY = random.Next(1, ficha.Tablero.tamaño - 1);
+
+            // Verificar que la nueva posición no esté bloqueada
+            while (ficha.Tablero.celdas[nuevaX, nuevaY] == "■")
             {
-                x = random.Next(0, tablero.tamaño);
-                y = random.Next(0, tablero.tamaño);
-
-                if (tablero.celdas[x, y] == " " )//&& tablero.EsMovimientoValido(ficha, x, y))
-                {
-                    encontrado = true;
-                }
-                else
-                {
-                    intentos++;
-                }
+                nuevaX = random.Next(1, ficha.Tablero.tamaño - 1);
+                nuevaY = random.Next(1, ficha.Tablero.tamaño - 1);
             }
 
-            if (encontrado)
-            {
-                
-                // Actualizar posición de la ficha
-                tablero.celdas[ficha.PosicionX, ficha.PosicionY] = " "; // Liberar la casilla anterior
-                ficha.PosicionX = x;
-                ficha.PosicionY = y;
-                tablero.celdas[x, y] = ficha.Simbolo; // Marcar la nueva posición
-                //
-            
-                
-                
-                
-                Console.WriteLine($"{Nombre} se teletransportó a ({x}, {y}).");
-            }
-            else
-            {
-                Console.WriteLine("No se pudo encontrar una casilla vacía aleatoria.");
-            }
+            // Reaparecer en la nueva posición
+            ficha.PosicionX = nuevaX;
+            ficha.PosicionY = nuevaY;
+            ficha.Tablero.celdas[nuevaX, nuevaY] = ficha.Simbolo;
+
+            Console.WriteLine("Loki ha desaparecido en las sombras y ha reaparecido en una posición aleatoria.");
+            Thread.Sleep(1000);
         }
         else
         {
             Console.WriteLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
         }
-        
     }
 }

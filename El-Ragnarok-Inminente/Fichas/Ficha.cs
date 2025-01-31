@@ -13,8 +13,6 @@ public abstract class Ficha
     public bool InmuneATramapa { get; set; }
     public bool Paralizado { get; set; }
     public bool Invisible { get; set; }
-    public bool Inmovilizado { get; set; }
-    public int TiempoInmovilizacion { get; set; }
     public bool Atrapado;
     public bool Congelado;
     public int turnosAtrapado;
@@ -37,8 +35,6 @@ public abstract class Ficha
         Tablero = new Tablero(27);
         turnosAtrapado = 0;
         turnosCongelado = 0;
-
-
     }
 
     public void ReducirEnfriamientoHabilidades()
@@ -49,6 +45,5 @@ public abstract class Ficha
         }
     }
     
-
     public abstract void UsarHabilidad(int indice);   
 }

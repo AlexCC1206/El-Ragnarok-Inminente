@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class RayoDeOdin : Habilidad
 {
@@ -13,14 +14,13 @@ public class RayoDeOdin : Habilidad
             TurnosRestantes = Enfriamiento;
             ficha.Velocidad = ficha.VelocidadBase; // Restaurar velocidad base
             ficha.Paralizado = false;          // Quitar parálisis si existe
-            //ficha.InmuneATramapa = false;      // Quitar inmunidad a trampas si existe
-            //ficha.Invisible = false;           // Quitar invisibilidad si existe
-            //ficha.Inmovilizado = false;        // Quitar inmovilización si existe
-            Console.WriteLine($"[yellow]{ficha.Nombre} fue curado y todas las penalizaciones fueron eliminadas.[/]");
+            AnsiConsole.MarkupLine($"[yellow]{ficha.Nombre} fue curado y todas las penalizaciones fueron eliminadas.[/]");
+            Thread.Sleep(1000);
         }
         else
         {
-            Console.WriteLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
+            AnsiConsole.MarkupLine($"[red]{Nombre} no está disponible. Turnos restantes: {TurnosRestantes}[/]");
+            Thread.Sleep(1000);
         }
     }
 }

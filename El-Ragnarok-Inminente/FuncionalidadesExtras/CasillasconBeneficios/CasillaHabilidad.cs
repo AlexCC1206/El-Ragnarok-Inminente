@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class CasillaHabilidad : Casilla
 {
@@ -13,7 +14,7 @@ public class CasillaHabilidad : Casilla
     public override void AplicarEfecto(Ficha ficha)
     {
         ficha.Habilidades.Add(HabilidadAdicional);
-        Console.WriteLine($"{ficha.Nombre} ha obtenido la habilidad {HabilidadAdicional.Nombre}");
-        System.Threading.Thread.Sleep(3000);
+        AnsiConsole.MarkupLine($"[green]{ficha.Nombre} ha obtenido la habilidad {HabilidadAdicional.Nombre}[/]");
+        Thread.Sleep(1000);
     }
 }

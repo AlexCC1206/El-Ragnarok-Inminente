@@ -1,4 +1,5 @@
 using System;
+using Spectre.Console;
 
 public class JotunheimTrap : Trampa
 {
@@ -12,15 +13,15 @@ public class JotunheimTrap : Trampa
         if (turnosRestantes > 0)
         {
             ficha.Velocidad = 1; // Reduce la velocidad de la ficha
-            Console.WriteLine($"{ficha.Nombre} se ralentiza debido a las Piedras de Jotunheim. Turnos restantes: {turnosRestantes}");
+            AnsiConsole.MarkupLine($"[bold red]{ficha.Nombre} se ralentiza debido a las Piedras de Jotunheim. Turnos restantes: {turnosRestantes}[/]");
             turnosRestantes--; // Reduce el contador de turnos
             
-
         }
         else
         {
-            Console.WriteLine($"{ficha.Nombre} ya no está afectado por las Piedras de Jotunheim.");
-        }      
-        System.Threading.Thread.Sleep(2000);     
+            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} ya no está afectado por las Piedras de Jotunheim.[/]");
+            
+        } 
+        Thread.Sleep(1000);     
     }
 }

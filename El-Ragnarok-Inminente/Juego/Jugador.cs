@@ -10,7 +10,6 @@ public class Jugador
     
     public Jugador(string nombre)
     {
-    
         Nombre = nombre;
         Fichas = new List<Ficha>();
     }
