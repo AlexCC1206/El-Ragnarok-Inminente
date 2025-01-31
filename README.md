@@ -28,9 +28,9 @@ git clone https://github.com/AlexCC1206/El-Ragnarok-Inminente.
  
 📞 Contacto
 
-Nombre: Alex Jr
-Correo: alexjr@example.com
-GitHub: github.com/AlexJr
+Nombre: Alex 
+Correo: gutyalex217@gmail.com
+GitHub: github.com/AlexCC1206
 
 ¡Gracias por jugar El Ragnarok Inminente! 🎮
 ¡Que los dioses te guíen hacia la victoria! ⚡
