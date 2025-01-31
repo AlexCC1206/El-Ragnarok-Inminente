@@ -24,7 +24,7 @@ Spectre.Console: Biblioteca para crear interfaces de consola interactivas y visu
 📥 Instalación
 
 Clonar el repositorio:
-git clone https://github.com/AlexJr/El-Ragnarok-Inminente.
+git clone https://github.com/AlexCC1206/El-Ragnarok-Inminente.
  
 📞 Contacto
 
