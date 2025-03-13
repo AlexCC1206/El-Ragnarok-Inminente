@@ -107,7 +107,7 @@ public static class InterfazJuego
         AnsiConsole.Write(reglas);
 
         var panel = new Panel(@"
-        1. Usa WASD para mover la ficha (Jugador 1) o las flechas (Jugador 2).
+        1. Usa las flechas para mover la ficha (Jugador 1) y (Jugador 2).
         2. Evita las trampas y obstáculos para llegar a la salida.
         3. ¡Diviértete!
         4. [bold yellow]Presiona cualquier tecla para volver al menú principal...[/]

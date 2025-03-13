@@ -15,19 +15,18 @@ public class TormentaHeladadeHelheim : Trampa
 
         if (probabilidad == 0) // 50% de probabilidad de ser afectado
         {
+            AnsiConsole.MarkupLine($"[bold red]¡{ficha.Nombre} ha caído en una Tormenta Helada! Congelada por {turnosCongelado} turnos.[/]");
             ficha.Congelado = true;
             turnosCongelado = 2;
-            AnsiConsole.MarkupLine($"[bold red]¡{ficha.Nombre} ha caído en una Tormenta Helada! Congelada por {turnosCongelado} turnos.[/]");
-            
         }
         else
         {
-            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} evita las Columnas de Fuego y no pierde un turno.[/]");
+            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} evita la Tormenta Helada y no pierde dos turnos.[/]");
             
         }
         Thread.Sleep(1000);
     }
-
+    /*
     public void Descongelar(Ficha ficha)
     {
         if (turnosCongelado > 0)
@@ -44,4 +43,5 @@ public class TormentaHeladadeHelheim : Trampa
         }
         Thread.Sleep(1000);
     }
+    */
 }

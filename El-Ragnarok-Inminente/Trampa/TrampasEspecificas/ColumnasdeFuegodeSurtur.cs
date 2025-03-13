@@ -9,6 +9,12 @@ public class ColumnasdeFuegodeSurtur : Trampa
 
     public override void Activar(Ficha ficha)
     {
+        if (!ficha.InmuneATramapa) 
+        {
+            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} evita las Columnas de Fuego y no pierde un turno.[/]");
+            return;
+        }
+
         Random rnd = new Random();
         int probabilidad = rnd.Next(0, 2); // 50% de probabilidad de ser afectado (0 o 1)
 

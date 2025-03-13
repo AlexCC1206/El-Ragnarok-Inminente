@@ -21,7 +21,7 @@ public class WindTrap : Trampa
         }
         else
         {
-            Console.WriteLine($"[green]{ficha.Nombre} resiste el efecto del Viento de Jörmungandr y continúa sin cambios.[/]");
+            AnsiConsole.MarkupLine($"[green]{ficha.Nombre} resiste el efecto del Viento de Jörmungandr y continúa sin cambios.[/]");
             
         }
         Thread.Sleep(1000);

@@ -46,4 +46,5 @@ public abstract class Ficha
     }
     
     public abstract void UsarHabilidad(int indice);   
+    
 }

@@ -9,7 +9,7 @@ public class Tablero
     private Random random;
     private List<Trampa> trampas;
     private List<Ficha> fichas;
-    private (int, int) salida;     
+    private (int, int) salida; // Coordenadas de la salida     
     public List<Casilla> casillas;
 
     public Tablero(int n)
@@ -23,6 +23,9 @@ public class Tablero
         
         Inicializar();
         GenerarSalida();
+        AñadirObstaculos();
+        AñadirTrampas();
+        AñadirCasillasBeneficios();
     }
 
     private void Inicializar()
@@ -43,10 +46,6 @@ public class Tablero
             celdas[i, 0] = "■"; // Primera columna
             celdas[i, tamaño - 1] = "■"; // Última columna
         }
-
-        AñadirObstaculos();
-        AñadirTrampas();
-        AñadirCasillasBeneficios();
     }
 
     private void GenerarSalida()
@@ -110,7 +109,7 @@ public class Tablero
             case 1:
                 return new WindTrap();
             case 2:
-                return new TormentaHeladadeHelheim();
+                return new JotunheimTrap();
             default:
                 return new ColumnasdeFuegodeSurtur();
         }
@@ -180,20 +179,26 @@ public class Tablero
     {
         celdas[obstaculoX, obstaculoY] = "■";
 
-        bool accesible = HayCamino(1, 1, tamaño - 2, tamaño - 2);
+        bool desdeJugador1 = HayCamino(1, 1, salida.Item1, salida.Item2);
+        bool desdeJugador2 = HayCamino(tamaño - 2, tamaño - 2, salida.Item1, salida.Item2);
 
         celdas[obstaculoX, obstaculoY] = " ";
 
-        return accesible;
+        return desdeJugador1 && desdeJugador2; 
     }
 
     private bool HayCamino(int startX, int startY, int endX, int endY)
     {
+        // Verificación inicial: si inicio o fin son obstáculos ("■"), no hay camino
         if (celdas[startX, startY] == "■" || celdas[endX, endY] == "■")
             return false;
 
         bool[,] visitado = new bool[tamaño, tamaño];
+
+        // Pila para DFS
         Stack<(int, int)> pila = new Stack<(int, int)>();
+
+        // Iniciamos con el punto de partida
         pila.Push((startX, startY));
         visitado[startX, startY] = true;
 
@@ -202,10 +207,12 @@ public class Tablero
 
         while (pila.Count > 0)
         {
+            // Extraemos coordenada actual (LIFO - último en entrar, primero en salir)
             var (x, y) = pila.Pop();
             if (x == endX && y == endY)
                 return true;
 
+            // Exploramos las 4 direcciones posibles
             for (int i = 0; i < 4; i++)
             {
                 int nuevoX = x + dx[i];
@@ -213,11 +220,13 @@ public class Tablero
 
                 if (nuevoX >= 0 && nuevoX < tamaño && nuevoY >= 0 && nuevoY < tamaño && !visitado[nuevoX, nuevoY] && celdas[nuevoX, nuevoY] != "■")
                 {
+                    // Agregamos a la pila y marcamos como visitado
                     pila.Push((nuevoX, nuevoY));
                     visitado[nuevoX, nuevoY] = true;
                 }
             }
         }
+        // Si vaciamos la pila sin encontrar destino: no hay camino
         return false;
     }
     
@@ -256,6 +265,7 @@ public class Tablero
         // Mostrar estado de las fichas
         foreach (var ficha in fichas)
         {
+            //AnsiConsole.MarkupLine($"[bold {ficha.Color.ToMarkup()}]{ficha.Nombre} está en ({ficha.PosicionX}, {ficha.PosicionY})[/]");
             AnsiConsole.MarkupLine($"[bold yellow]{ficha.Nombre} está en ({ficha.PosicionX}, {ficha.PosicionY})[/]");
         }
     }

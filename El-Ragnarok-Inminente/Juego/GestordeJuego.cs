@@ -4,11 +4,12 @@ using Spectre.Console;
 
 public class Juego
 {
-    private Tablero tablero;
-    private Turno turno;
-    private Ficha fichaJugador1;
-    private Ficha fichaJugador2;
+    private Tablero tablero; // Instancia del tablero donde se desarrolla el juego
+    private Turno turno;     // Gestiona los turnos de los jugadores
+    private Ficha fichaJugador1; // Ficha asignada al Jugador 1
+    private Ficha fichaJugador2; // Ficha asignada al Jugador 2
 
+    // Constructor: Inicializa el juego con un tablero y una lista de jugadores
     public Juego(Tablero tablero, List<Jugador> jugadores)
     {
         this.tablero = tablero;
@@ -23,19 +24,21 @@ public class Juego
         tablero.AñadirFicha(fichaJugador2, tablero.tamaño - 2, tablero.tamaño - 2);
     }
     
+    // Método principal que inicia el juego
     public void Iniciar()
     {   
         while (true)
         {
             Jugador jugadorActual = turno.ObtenerJugadorActual();
-            Ficha fichaSeleccionada = jugadorActual == turno.jugadores[0] ? fichaJugador1 : fichaJugador2;
+            Ficha fichaSeleccionada = jugadorActual == turno.jugadores[0] ? fichaJugador1 : fichaJugador2; // Selecciona la ficha del jugador actual
             
             ActualizarTablero();
 
             string opcionSeleccionada = InterfazJuego.MostrarOpciones();
 
             AnsiConsole.MarkupLine($"[bold]Turno de {jugadorActual.Nombre}[/]");
-            // Realizar la acción seleccionada
+            
+            // Realizar la acción seleccionada por el jugador
             switch (opcionSeleccionada)
             {
                 case "Moverse":
@@ -49,6 +52,7 @@ public class Juego
             // Verificar si la ficha ha llegado a la salida
             if (tablero.EsSalida(fichaSeleccionada.PosicionX, fichaSeleccionada.PosicionY))
             {
+                /*
                 Console.Clear();
                 
                 var textoVictoria = new FigletText($"¡{jugadorActual.Nombre} ha ganado!")
@@ -56,6 +60,9 @@ public class Juego
                     .Centered();
 
                 AnsiConsole.Write(textoVictoria);
+                Environment.Exit(0); // Termina el juego
+                */
+                AnsiConsole.MarkupLine($"[bold green]{jugadorActual.Nombre} ha ganado al llegar a la salida con {fichaSeleccionada.Nombre}![/]");
                 Environment.Exit(0); // Termina el juego
             }
 
@@ -68,15 +75,15 @@ public class Juego
     {
         int movimientosRestantes = ficha.Velocidad;
 
-        while (movimientosRestantes > 0)
+        while (movimientosRestantes > 0) // Permite moverse hasta agotar los movimientos
         {
-            var key = Console.ReadKey(true).Key;
+            var key = Console.ReadKey(true).Key; // Captura la tecla presionada
             int nuevaX = ficha.PosicionX;
             int nuevaY = ficha.PosicionY;
 
             if (jugador.Nombre == "Jugador 1" || jugador.Nombre == "Jugador 2")
             {
-                    switch (key)
+                switch (key)
                 {
                     case ConsoleKey.UpArrow:
                         nuevaX--;
@@ -93,6 +100,7 @@ public class Juego
                 }
             } 
 
+            // Si la posición cambió, intenta mover la ficha
             if (nuevaX != ficha.PosicionX || nuevaY != ficha.PosicionY)
             {
                 try
@@ -103,7 +111,7 @@ public class Juego
                     }
                     catch (InvalidOperationException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine(ex.Message); // Muestra un mensaje de error si el movimiento no es válido
                     }
             }
         }
